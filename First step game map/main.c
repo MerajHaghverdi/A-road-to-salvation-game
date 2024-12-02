@@ -59,6 +59,33 @@ void get_kingdom(char map[rows][columns]) {
         }
     }
 }
+
+void get_villages(char map[rows][columns], int goldRate[], int foodRate[]) {
+    int numVillages;
+    printf("Enter the number of villages: ");
+    scanf("%d", &numVillages);
+
+    for (int i = 0; i < numVillages; i++) {
+        int x, y, goldRate, foodRate;
+        printf("Enter the coordinates of village %d (row column): ", i + 1);
+        scanf("%d %d", &x, &y);
+
+        if (map[x][y] == 'O') {
+            map[x][y] = 'V';
+            printf("Enter gold production rate for this village: ");
+            scanf("%d", &goldRate);
+            printf("Enter food production rate for this village: ");
+            scanf("%d", &foodRate);
+
+            goldRate[i] = goldRate;
+            foodRate[i] = foodRate;
+        } else {
+            printf("Cell already occupied. Try again.\n");
+            i--;
+        }
+    }
+}
+
 int main()
 {
 
@@ -71,9 +98,12 @@ int main()
             printf("enter columns =");
             scanf("%d", &columns);
             char map[rows][columns];
+            int goldRate[rows];
+            int foodRate[rows]
             generate_map(map);
             get_blocked(map);
             get_kingdom(map);
+            get_villages(map,goldRate,foodRate);
             print_map(map);
         }
 
