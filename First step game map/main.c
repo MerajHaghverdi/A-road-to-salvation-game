@@ -42,16 +42,16 @@ void get_blocked (char map[rows][columns]) {
         }
     }
 }
-void addHeadquarters(char map[SIZE][SIZE]) {
-    int numHQ;
-    printf("Enter the number of headquarters: ");
-    scanf("%d", &numHQ);
+void get_kingdom(char map[rows][columns]) {
+    int num_kings;
+    printf("Enter the number of kingdoms: \n");
+    scanf("%d", &num_kings);
 
-    for (int i = 0; i < numHQ; i++) {
+    for (int i = 0; i < num_kings; i++) {
         int x, y;
-        printf("Enter the coordinates of headquarters %d (row column): ", i + 1);
+        printf("Enter the coordinates of kingdoms %d (row column): ", i + 1);
         scanf("%d %d", &x, &y);
-        if (map[x][y] == '.') {
+        if (map[x][y] == 'O') {
             map[x][y] = 'C';
         } else {
             printf("Cell already occupied. Try again.\n");
@@ -73,6 +73,7 @@ int main()
             char map[rows][columns];
             generate_map(map);
             get_blocked(map);
+            get_kingdom(map);
             print_map(map);
         }
 
