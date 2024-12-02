@@ -32,5 +32,6 @@ int main()
     char map[rows][columns];
     generate_map(map);
     print_map(map);
+
     return 0;
 }
