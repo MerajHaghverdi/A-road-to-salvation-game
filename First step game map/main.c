@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <time.h>
 
-int rows,columns;
+int rows,columns,numVillages;
 // function to genrating empty map
 void generate_map(char map[rows][columns]) {
     for (int i=0; i<columns; i++){
@@ -60,10 +60,7 @@ void get_kingdom(char map[rows][columns]) {
     }
 }
 
-void get_villages(char map[rows][columns], int goldRate[], int foodRate[]) {
-    int numVillages;
-    printf("Enter the number of villages: ");
-    scanf("%d", &numVillages);
+void get_villages(char map[rows][columns],int numVillages, int goldRates[], int foodRates[]) {
 
     for (int i = 0; i < numVillages; i++) {
         int x, y, goldRate, foodRate;
@@ -77,15 +74,20 @@ void get_villages(char map[rows][columns], int goldRate[], int foodRate[]) {
             printf("Enter food production rate for this village: ");
             scanf("%d", &foodRate);
 
-            goldRate[i] = goldRate;
-            foodRate[i] = foodRate;
+            goldRates[i] = goldRate;
+            foodRates[i] = foodRate;
         } else {
             printf("Cell already occupied. Try again.\n");
             i--;
         }
     }
 }
-
+void VillageInfo(int numVillages, int goldRates[], int foodRates[]) {
+    printf("\nVillage Information:\n");
+    for (int i = 0; i < numVillages; i++) {
+        printf("Village %d -> Gold Rate: %d, Food Rate: %d\n", i + 1, goldRates[i], foodRates[i]);
+    }
+}
 int main()
 {
 
@@ -98,13 +100,16 @@ int main()
             printf("enter columns =");
             scanf("%d", &columns);
             char map[rows][columns];
-            int goldRate[rows];
-            int foodRate[rows]
             generate_map(map);
             get_blocked(map);
             get_kingdom(map);
-            get_villages(map,goldRate,foodRate);
+            printf("Enter the number of villages: ");
+            scanf("%d", &numVillages);
+            int goldRates[numVillages];
+            int foodRates[numVillages];
+            get_villages(map,numVillages,goldRates,foodRates);
             print_map(map);
+            VillageInfo(numVillages, goldRates,foodRates);
         }
 
     return 0;
