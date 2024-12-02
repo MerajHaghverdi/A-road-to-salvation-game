@@ -24,6 +24,24 @@ void print_map(char map[rows][columns])
         printf("\n");
     }
 }
+//get blocked
+void get_blocked (char map[rows][columns]) {
+    int numBlocked;
+    printf("How many blocked cells: ");
+    scanf("%d", &numBlocked);
+
+    for (int i = 0; i < numBlocked; i++) {
+        int x, y;
+        printf("Enter the coordinates of blocked cell (row column): ", i + 1);
+        scanf("%d %d", &x, &y);
+        if (map[x][y] == 'O') {
+            map[x][y] = 'X';
+        } else {
+            printf("Cell already occupied. Try again.\n");
+            i--;
+        }
+    }
+}
 int main()
 {
     printf("enter rows =");
@@ -32,8 +50,8 @@ int main()
     scanf("%d",&columns);
     char map[rows][columns];
     generate_map(map);
-    print_map(map);
     get_blocked(map);
+    print_map(map);
 
     return 0;
 }
