@@ -4,7 +4,7 @@
 #include <time.h>
 #include <ctime>
 int rows,columns;
-
+// function to genrating empty map
 void generate_map(char map[rows][columns]) {
     for(int j =0; j<columns; j++){
         map[0][j]=j;
@@ -15,6 +15,17 @@ void generate_map(char map[rows][columns]) {
     for (int i=1; i<columns; i++){
         for (int j=1; j<rows; j++){
             map[rows][columns]='O'
+        }
+    }
+}
+// Function to print the map
+void print_map(char map[rows][columns])
+{
+    for(int i = 0;i < rows;++i)
+    {
+        for(int j = 0;j < columns;++j)
+        {
+            printf("%c",map[i][j]);
         }
     }
 }
