@@ -33,6 +33,7 @@ int main()
     char map[rows][columns];
     generate_map(map);
     print_map(map);
+    get_blocked(map);
 
     return 0;
 }
