@@ -44,14 +44,20 @@ void get_blocked (char map[rows][columns]) {
 }
 int main()
 {
-    printf("enter rows =");
-    scanf("%d",&rows);
-    printf("enter columns =");
-    scanf("%d",&columns);
-    char map[rows][columns];
-    generate_map(map);
-    get_blocked(map);
-    print_map(map);
+
+    int action;
+        printf("welcome to A road to salvation game\n1.Enter to game\n2.Exit\nenter your acyion:");
+        scanf("%d",&action);
+        if (action==1) {
+            printf("enter rows =");
+            scanf("%d", &rows);
+            printf("enter columns =");
+            scanf("%d", &columns);
+            char map[rows][columns];
+            generate_map(map);
+            get_blocked(map);
+            print_map(map);
+        }
 
     return 0;
 }
