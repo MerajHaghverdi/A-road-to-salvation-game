@@ -42,6 +42,23 @@ void get_blocked (char map[rows][columns]) {
         }
     }
 }
+void addHeadquarters(char map[SIZE][SIZE]) {
+    int numHQ;
+    printf("Enter the number of headquarters: ");
+    scanf("%d", &numHQ);
+
+    for (int i = 0; i < numHQ; i++) {
+        int x, y;
+        printf("Enter the coordinates of headquarters %d (row column): ", i + 1);
+        scanf("%d %d", &x, &y);
+        if (map[x][y] == '.') {
+            map[x][y] = 'C';
+        } else {
+            printf("Cell already occupied. Try again.\n");
+            i--;
+        }
+    }
+}
 int main()
 {
 
