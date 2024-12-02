@@ -19,15 +19,16 @@ void print_map(char map[rows][columns])
     {
         for(int j = 0;j < columns;++j)
         {
-            printf("%c",map[i][j]);
+            printf("%c ",map[i][j]);
         }
+        printf("\n");
     }
 }
 int main()
 {
-    printf("enter rows = ");
+    printf("enter rows =");
     scanf("%d",&rows);
-    printf("enter columns = ");
+    printf("enter columns =");
     scanf("%d",&columns);
     char map[rows][columns];
     generate_map(map);
