@@ -75,7 +75,7 @@ void get_kingdom(char map[rows + 1][columns + 1]) {
     }
 }
 
-void get_villages(char map[rows][columns],int numVillages, int goldRates[], int foodRates[]) {
+void get_villages(char map[rows + 1][columns + 1],int numVillages, int goldRates[], int foodRates[]) {
 
     for (int i = 0; i < numVillages; i++) {
         int x, y, goldRate, foodRate;
