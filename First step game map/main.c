@@ -13,38 +13,17 @@ void generate_map(char map[rows][columns]) {
     }
 }
 // Function to print the map
-void print_map(char map[rows + 1][columns + 1]) {
-    printf("   ");
-    for (int j = 1; j <= columns; j++) {
-        printf("%2d ", j);
-    }
-    printf("\n");
-
-    for (int i = 1; i <= rows; i++) {
-        printf("%2d ", i);
-        for (int j = 1; j <= columns; j++) {
-            switch (map[i][j]) {
-                case 'O':
-                    printf("🌾 ");
-                    break;
-                case 'X':
-                    printf("🪨 ");
-                    break;
-                case 'C':
-                    printf("🏰 ");
-                    break;
-                case 'V':
-                    printf("🏠 ");
-                    break;
-                default:
-                    printf("❓ ");
-                    break;
-            }
+void print_map(char map[rows][columns])
+{
+    for(int i = 0;i < rows;++i)
+    {
+        for(int j = 0;j < columns;++j)
+        {
+            printf("%c ",map[i][j]);
         }
         printf("\n");
     }
 }
-
 //get blocked
 void get_blocked (char map[rows][columns]) {
     int numBlocked;
