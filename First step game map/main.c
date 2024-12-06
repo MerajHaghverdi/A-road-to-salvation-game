@@ -32,7 +32,7 @@ void print_map(char map[MAX_ROWS + 1][MAX_COLUMNS + 1]) {
                     printf("🌾 ");
                     break;
                 case 'X':
-                    printf("🪨 ");
+                    printf("❌ ");
                     break;
                 case 'C':
                     printf("🏰 ");
