@@ -19,26 +19,39 @@ void generate_map(char map[rows + 1][columns + 1]) {
         }
     }
 }
-// Function to print the map
+//printing map
 void print_map(char map[rows + 1][columns + 1]) {
-    for (int i = 0; i <= rows; i++) {
-        for (int j = 0; j <= columns; j++) {
-            if (i == 0 && j > 0) {
-                printf("%2d ", j);
-            } else if (j == 0 && i > 0) {
-                printf("%2d ", i);
-            }
-            else if(i ==0 && j == 0)
-            {
-                printf("%2d ", 0);
-            }
-             else {
-                printf("%2c ", map[i][j]);
+    printf("   ");
+    for (int j = 1; j <= columns; j++) {
+        printf("%2d ", j);
+    }
+    printf("\n");
+
+    for (int i = 1; i <= rows; i++) {
+        printf("%2d ", i);
+        for (int j = 1; j <= columns; j++) {
+            switch (map[i][j]) {
+                case 'O':
+                    printf("🌾 ");
+                    break;
+                case 'X':
+                    printf("🪨 ");
+                    break;
+                case 'C':
+                    printf("🏰 ");
+                    break;
+                case 'V':
+                    printf("🏠 ");
+                    break;
+                default:
+                    printf("❓ ");
+                    break;
             }
         }
         printf("\n");
     }
 }
+
 //get blocked
 void get_blocked (char map[rows + 1][columns + 1]) {
     int numBlocked;
@@ -107,25 +120,25 @@ int main()
 {
 
     int action;
-        printf("welcome to A road to salvation game\n1.Enter to game\n2.Exit\nenter your acyion:");
-        scanf("%d",&action);
-        if (action==1) {
-            printf("enter rows =");
-            scanf("%d", &rows);
-            printf("enter columns =");
-            scanf("%d", &columns);
-            char map[rows][columns];
-            generate_map(map);
-            get_blocked(map);
-            get_kingdom(map);
-            printf("Enter the number of villages: ");
-            scanf("%d", &numVillages);
-            int goldRates[numVillages];
-            int foodRates[numVillages];
-            get_villages(map,numVillages,goldRates,foodRates);
-            print_map(map);
-            VillageInfo(numVillages, goldRates,foodRates);
-        }
+    printf("welcome to A road to salvation game\n1.Enter to game\n2.Exit\nenter your action:");
+    scanf("%d",&action);
+    if (action==1) {
+        printf("enter rows =");
+        scanf("%d", &rows);
+        printf("enter columns =");
+        scanf("%d", &columns);
+        char map[rows][columns];
+        generate_map(map);
+        get_blocked(map);
+        get_kingdom(map);
+        printf("Enter the number of villages: ");
+        scanf("%d", &numVillages);
+        int goldRates[numVillages];
+        int foodRates[numVillages];
+        get_villages(map,numVillages,goldRates,foodRates);
+        print_map(map);
+        VillageInfo(numVillages, goldRates,foodRates);
+    }
 
     return 0;
 }
