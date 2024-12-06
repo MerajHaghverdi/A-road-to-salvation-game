@@ -1,53 +1,62 @@
 #include <stdio.h>
-#include <windows.h>
-#include <conio.h>
-#include <time.h>
 
-int rows,columns,numVillages;
-// function to genrating empty map
-void generate_map(char map[rows + 1][columns + 1]) {
-    for (int i=0; i<=rows; i++){
-        for (int j=0; j<=columns; j++){
-            if(i == 0 || j == 0)
-            {
+#define MAX_ROWS 17
+#define MAX_COLUMNS 17
+
+int rows, columns, numVillages;
+
+void generate_map(char map[MAX_ROWS + 1][MAX_COLUMNS + 1]) {
+    for (int i = 0; i <= rows; i++) {
+        for (int j = 0; j <= columns; j++) {
+            if (i == 0 || j == 0) {
                 map[i][j] = ' ';
-            }
-            else
-            {
+            } else {
                 map[i][j] = 'O';
             }
         }
     }
 }
-// Function to print the map
-void print_map(char map[rows + 1][columns + 1]) {
-    for (int i = 0; i <= rows; i++) {
-        for (int j = 0; j <= columns; j++) {
-            if (i == 0 && j > 0) {
-                printf("%2d ", j);
-            } else if (j == 0 && i > 0) {
-                printf("%2d ", i);
-            }
-            else if(i ==0 && j == 0)
-            {
-                printf("%2d ", 0);
-            }
-            else {
-                printf("%2c ", map[i][j]);
+
+void print_map(char map[MAX_ROWS + 1][MAX_COLUMNS + 1]) {
+    printf("   ");
+    for (int j = 1; j <= columns; j++) {
+        printf("%2d ", j);
+    }
+    printf("\n");
+
+    for (int i = 1; i <= rows; i++) {
+        printf("%2d ", i);
+        for (int j = 1; j <= columns; j++) {
+            switch (map[i][j]) {
+                case 'O':
+                    printf("🌾 ");
+                    break;
+                case 'X':
+                    printf("🪨 ");
+                    break;
+                case 'C':
+                    printf("🏰 ");
+                    break;
+                case 'V':
+                    printf("🏠 ");
+                    break;
+                default:
+                    printf("❓ ");
+                    break;
             }
         }
         printf("\n");
     }
 }
-//get blocked
-void get_blocked (char map[rows + 1][columns + 1]) {
+
+void get_blocked(char map[MAX_ROWS + 1][MAX_COLUMNS + 1]) {
     int numBlocked;
     printf("How many blocked cells: ");
     scanf("%d", &numBlocked);
 
     for (int i = 0; i < numBlocked; i++) {
         int x, y;
-        printf("Enter the coordinates of blocked cell  %d (row column): ", i + 1);
+        printf("Enter the coordinates of blocked cell %d (row column): ", i + 1);
         scanf("%d %d", &x, &y);
         if (map[x][y] == 'O') {
             map[x][y] = 'X';
@@ -57,14 +66,15 @@ void get_blocked (char map[rows + 1][columns + 1]) {
         }
     }
 }
-void get_kingdom(char map[rows + 1][columns + 1]) {
+
+void get_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1]) {
     int num_kings;
-    printf("Enter the number of kingdoms: \n");
+    printf("Enter the number of kingdoms: ");
     scanf("%d", &num_kings);
 
     for (int i = 0; i < num_kings; i++) {
         int x, y;
-        printf("Enter the coordinates of kingdoms %d (row column): ", i + 1);
+        printf("Enter the coordinates of kingdom %d (row column): ", i + 1);
         scanf("%d %d", &x, &y);
         if (map[x][y] == 'O') {
             map[x][y] = 'C';
@@ -75,8 +85,7 @@ void get_kingdom(char map[rows + 1][columns + 1]) {
     }
 }
 
-void get_villages(char map[rows + 1][columns + 1],int numVillages, int goldRates[], int foodRates[]) {
-
+void get_villages(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int goldRates[], int foodRates[]) {
     for (int i = 0; i < numVillages; i++) {
         int x, y, goldRate, foodRate;
         printf("Enter the coordinates of village %d (row column): ", i + 1);
@@ -97,34 +106,43 @@ void get_villages(char map[rows + 1][columns + 1],int numVillages, int goldRates
         }
     }
 }
+
 void VillageInfo(int numVillages, int goldRates[], int foodRates[]) {
     printf("\nVillage Information:\n");
     for (int i = 0; i < numVillages; i++) {
         printf("Village %d -> Gold Rate: %d, Food Rate: %d\n", i + 1, goldRates[i], foodRates[i]);
     }
 }
-int main()
-{
 
+int main() {
     int action;
-    printf("welcome to A road to salvation game\n1.Enter to game\n2.Exit\nenter your acyion:");
-    scanf("%d",&action);
-    if (action==1) {
-        printf("enter rows =");
+    printf("welcome to A road to salvation game\n1.Enter to game\n2.Exit\nenter your action: ");
+    scanf("%d", &action);
+
+    if (action == 1) {
+        printf("Enter rows (max %d): ", MAX_ROWS);
         scanf("%d", &rows);
-        printf("enter columns =");
+        if (rows > MAX_ROWS) rows = MAX_ROWS;
+
+        printf("Enter columns (max %d): ", MAX_COLUMNS);
         scanf("%d", &columns);
-        char map[rows][columns];
+        if (columns > MAX_COLUMNS) columns = MAX_COLUMNS;
+
+        char map[MAX_ROWS + 1][MAX_COLUMNS + 1];
+
         generate_map(map);
         get_blocked(map);
         get_kingdom(map);
+
         printf("Enter the number of villages: ");
         scanf("%d", &numVillages);
+
         int goldRates[numVillages];
         int foodRates[numVillages];
-        get_villages(map,numVillages,goldRates,foodRates);
+
+        get_villages(map, goldRates, foodRates);
         print_map(map);
-        VillageInfo(numVillages, goldRates,foodRates);
+        VillageInfo(numVillages, goldRates, foodRates);
     }
 
     return 0;
