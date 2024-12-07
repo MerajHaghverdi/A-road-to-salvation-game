@@ -58,7 +58,10 @@ void get_blocked(char map[MAX_ROWS + 1][MAX_COLUMNS + 1]) {
         int x, y;
         printf("Enter the coordinates of blocked cell %d (row column): ", i + 1);
         scanf("%d %d", &x, &y);
-        if (map[x][y] == 'O') {
+        if (x>rows || y>columns){
+            printf("out of the map. try again\n");
+            i--;
+        }else if (map[x][y] == 'O') {
             map[x][y] = 'X';
         } else {
             printf("Cell already occupied. Try again.\n");
@@ -76,7 +79,10 @@ void get_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1]) {
         int x, y;
         printf("Enter the coordinates of kingdom %d (row column): ", i + 1);
         scanf("%d %d", &x, &y);
-        if (map[x][y] == 'O') {
+        if (x>rows || y>columns){
+            printf("out of the map. try again\n");
+            i--;
+        }else if (map[x][y] == 'O') {
             map[x][y] = 'C';
         } else {
             printf("Cell already occupied. Try again.\n");
@@ -91,7 +97,10 @@ void get_villages(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int goldRates[], int 
         printf("Enter the coordinates of village %d (row column): ", i + 1);
         scanf("%d %d", &x, &y);
 
-        if (map[x][y] == 'O') {
+        if (x>rows || y>columns){
+            printf("out of the map. try again\n");
+            i--;
+        }else if (map[x][y] == 'O') {
             map[x][y] = 'V';
             printf("Enter gold production rate for this village: ");
             scanf("%d", &goldRate);
