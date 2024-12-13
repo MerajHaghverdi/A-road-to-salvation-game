@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define MAX_ROWS 17
 #define MAX_COLUMNS 17
@@ -17,19 +19,52 @@ void generate_map(char map[MAX_ROWS + 1][MAX_COLUMNS + 1]) {
     }
 }
 
+int generate_number() {
+    double r = (double)rand() / RAND_MAX;
+    if (r < 0.65)
+        return 1;
+    else if (r < 0.9)
+        return 2;
+    else if (r < 0.95)
+        return 3;
+    else
+        return 4;
+}
+
+void genrate_hardness(char map[MAX_ROWS + 1][MAX_COLUMNS + 1]){
+    for (int i = 1; i <= rows; i++) {
+        for (int j = 1; j <= columns; j++) {
+            if (map[i][j]=='O'){
+                int num = generate_number();
+                map[i][j] = num + '0'; 
+
+            }
+        }
+    }
+}
+
 void print_map(char map[MAX_ROWS + 1][MAX_COLUMNS + 1]) {
     printf("   ");
     for (int j = 1; j <= columns; j++) {
         printf("%2d ", j);
     }
-    printf("\n");1
+    printf("\n");
 
     for (int i = 1; i <= rows; i++) {
         printf("%2d ", i);
         for (int j = 1; j <= columns; j++) {
             switch (map[i][j]) {
-                case 'O':
-                    printf("🌾 ");
+                case '1':
+                    printf("🟩 ");
+                    break;
+                case '2':
+                    printf("🟨 ");
+                    break;
+                case '3':
+                    printf("🟧 ");
+                    break;
+                case '4':
+                    printf("🟥 ");
                     break;
                 case 'X':
                     printf("❌ ");
@@ -124,6 +159,7 @@ void VillageInfo(int numVillages, int goldRates[], int foodRates[]) {
 }
 
 int main() {
+    srand(time(NULL));
     int action;
     printf("welcome to A road to salvation game\n1.Enter to game\n2.Exit\nenter your action: ");
     scanf("%d", &action);
@@ -150,6 +186,7 @@ int main() {
         int foodRates[numVillages];
 
         get_villages(map, goldRates, foodRates);
+        genrate_hardness(map);
         print_map(map);
         VillageInfo(numVillages, goldRates, foodRates);
     }
