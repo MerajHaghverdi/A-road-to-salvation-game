@@ -202,12 +202,12 @@ void collect_resources(int numKingdom, int numVillages,
                     } else {
                         printf("Village at (%d, %d) remains unconquered.\n", vx, vy);
                     }
-                }
-
-                if (village_status[j] == 1) {
+                    if (village_status[j] == 1) {
                     kingdom_gold_rate[i] += village_goldRates[j];
                     kingdom_food_rate[i] += village_foodRates[j];
                 }
+                }
+
             }
         }
     }
