@@ -182,7 +182,6 @@ void collect_resources(int numKingdom, int numVillages,
     for (int i = 0; i < numKingdom; i++) {
             kingdom_gold[i] += kingdom_gold_rate[i];
             kingdom_food[i] += kingdom_food_rate[i];
-        // بررسی روستاهای متعلق به این مقر
         for (int j = 0; j < numVillages; j++) {
             int vx = village_coordinates[j][0];
             int vy = village_coordinates[j][1];
