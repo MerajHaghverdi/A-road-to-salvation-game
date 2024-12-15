@@ -121,9 +121,9 @@ void get_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1],int kingdom_coordinates
             i--;
         }else if (map[x][y] == 'O') {
             map[x][y] = 'C';
-             printf("enter the gold rate of kingdom %d : ",i+1);
+             printf("enter the gold production rate of kingdom %d : ",i+1);
              scanf("%d",&kingdom_gold_rate[i]);
-             printf("enter the food rate of kingdom %d : ",i+1);
+             printf("enter the food production rate of kingdom %d : ",i+1);
              scanf("%d",&kingdom_food_rate[i]);
              kingdom_coordinates[i][0] = x;
              kingdom_coordinates[i][1] = y;
@@ -145,9 +145,9 @@ void get_villages(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int village_goldRates
             i--;
         }else if (map[x][y] == 'O') {
             map[x][y] = 'V';
-            printf("Enter gold production rate for this village: ");
+            printf("Enter gold production rate for village %d: ",i+1);
             scanf("%d", &goldRate);
-            printf("Enter food production rate for this village: ");
+            printf("Enter food production rate for this village %d: ",i+1);
             scanf("%d", &foodRate);
             vilage_coordinates[i][0]= x;
             vilage_coordinates[i][1]= y;
@@ -180,11 +180,8 @@ void collect_resources(int numKingdom, int numVillages,
                        int village_coordinates[][2], int kingdom_coordinates[][2], 
                        int village_status[]) {
     for (int i = 0; i < numKingdom; i++) {
-        if(i > 0)
-        {
             kingdom_gold[i] += kingdom_gold_rate[i];
             kingdom_food[i] += kingdom_food_rate[i];
-        }
         // بررسی روستاهای متعلق به این مقر
         for (int j = 0; j < numVillages; j++) {
             int vx = village_coordinates[j][0];
@@ -192,24 +189,22 @@ void collect_resources(int numKingdom, int numVillages,
             int kx = kingdom_coordinates[i][0];
             int ky = kingdom_coordinates[i][1];
 
-            // اگر روستا در فاصله مناسب باشد
+            
             if (abs(vx - kx) + abs(vy - ky) <= 2) {
                 if (village_status[j] == 0) {
-                    // روستا فتح نشده است؛ از بازیکن سوال می‌شود
                     printf("Village at (%d, %d) is within range of Kingdom %d. Do you want to conquer it? (1 = Yes, 0 = No): ", 
                            vx, vy, i + 1);
                     int choice;
                     scanf("%d", &choice);
 
                     if (choice == 1) {
-                        village_status[j] = 1; // فتح شد
+                        village_status[j] = 1; //the village conquered!
                         printf("Village at (%d, %d) is now conquered by Kingdom %d.\n", vx, vy, i + 1);
                     } else {
                         printf("Village at (%d, %d) remains unconquered.\n", vx, vy);
                     }
                 }
 
-                // جمع‌آوری منابع فقط از روستاهای فتح‌شده
                 if (village_status[j] == 1) {
                     kingdom_gold_rate[i] += village_goldRates[j];
                     kingdom_food_rate[i] += village_foodRates[j];
@@ -248,8 +243,8 @@ int main() {
         get_kingdom(map, kingdom_coordinates,numKingdom,kingdom_gold_rate,kingdom_food_rate);
         for(int i = 0; i < numKingdom; i++)
         {
-            kingdom_gold[i] = kingdom_gold_rate[i];
-            kingdom_food[i] = kingdom_food_rate[i];
+            kingdom_gold[i] = 0;
+            kingdom_food[i] = 0;
         }
 
         printf("Enter the number of villages: ");
@@ -280,7 +275,6 @@ int main() {
 
         VillageInfo(numVillages, village_goldRates, village_foodRates, village_coordinates);
         kingdominfo(numKingdom,kingdom_gold_rate,kingdom_food_rate,kingdom_gold,kingdom_food,kingdom_coordinates);
-        // سایر منطق‌های بازی
         printf("\nDo you want to continue? (1 = Yes, 0 = No): ");
         int continueGame;
         scanf("%d", &continueGame);
@@ -290,4 +284,3 @@ int main() {
  }
     return 0;
 }
-
