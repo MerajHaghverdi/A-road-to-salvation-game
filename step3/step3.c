@@ -296,6 +296,10 @@ void distance_maker()
 {
     printf("________________________________________________________________________________________________________________________________");
 }
+void clrscr()
+{
+    system("cls");
+}
 int main() {
     srand(time(NULL));
     int action;
@@ -372,6 +376,7 @@ int main() {
         scanf("%d", &continueGame);
         if (!continueGame) break;
         distance_maker();
+        clrscr();
     }
  }
     return 0;
