@@ -275,13 +275,13 @@ void conquer_villages(int numKingdom, int numVillages,
                 scanf("%d", &choice);
 
                 if (choice == 1) {
-                    village_status[j] = 1; // روستا فتح شد
+                    village_status[j] = 1; 
                     printf("Village at (%d, %d) is now conquered by Kingdom %d.\n", vx, vy, i + 1);
                     conquered_village[i][j][0] = vx;
                     conquered_village[i][j][1] = vy;
                     counter_conquered_village[i]++;
 
-                    // اضافه کردن منابع روستا به تولیدات پادشاهی
+            
                     kingdom_gold_rate[i] += village_goldRates[j];
                     kingdom_food_rate[i] += village_foodRates[j];
                 } else {
