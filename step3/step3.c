@@ -268,7 +268,7 @@ void conquer_villages(int numKingdom, int numVillages,
             int kx = kingdom_coordinates[i][0];
             int ky = kingdom_coordinates[i][1];
 
-            if (abs(vx - kx) + abs(vy - ky) <= 2 && village_status[j] == 0) {
+            if (abs(vx - kx) + abs(vy - ky) <= 1 && village_status[j] == 0) {
                 printf("Village at (%d, %d) is within range of Kingdom %d. Do you want to conquer it? (1 = Yes, 0 = No): ", 
                        vx, vy, i + 1);
                 int choice;
@@ -294,7 +294,7 @@ void conquer_villages(int numKingdom, int numVillages,
 
 void distance_maker()
 {
-    printf("________________________________________________________________________________________________________________________________");
+    printf("___________________________________________________________________________________________________________");
 }
 void clrscr()
 {
