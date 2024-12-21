@@ -148,6 +148,13 @@ void move_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int numkingdom, int k
                             current_location[i][1] = new_y;
                             continue; // No turn used
                         }
+                        if(map[new_x][new_y] == 'C')
+                        {
+                            printf("you are now in your kingdom! \n");
+                            current_location[i][0] = new_x;
+                            current_location[i][1] = new_y;
+                            continue;
+                        }
                         if (map[new_x][new_y] >= '1' && map[new_x][new_y] <= '4') {
                             map[new_x][new_y] -= kingdom_workers[i];
                             if (map[new_x][new_y] <= '0') {
