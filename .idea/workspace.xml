@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="364cb579-9e73-4481-a8ee-64e768763283" name="Changes" comment="villages info" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="ehsan_branch" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;MerajHaghverdi&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MerajHaghverdi/A-road-to-salvation-game.git&quot;,
+    &quot;accountId&quot;: &quot;67df0dad-86fd-40f0-8c35-11e67e6430db&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2pe5IzetYgJpzGkZHuQQkSo0xzm" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "C/C++ File.main.c.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/LOQ/Desktop/C/c projects",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="main.c" type="CppFileRunConfiguration" factoryName="CppFileRunConfiguration" temporary="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="A-road-to-salvation-game" TARGET_NAME="main.c" CONFIG_NAME="main.c">
+      <option name="sourceFile" value="First step game map\main.c" />
+      <method v="2">
+        <option name="com.jetbrains.cidr.cpp.runfile.CppFileBuildBeforeRunTaskProvider$BasicBuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="C/C++ File.main.c" />
+        <item itemvalue="C/C++ File.main.c" />
+        <item itemvalue="C/C++ File.main.c" />
+        <item itemvalue="C/C++ File.main.c" />
+        <item itemvalue="C/C++ File.main.c" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="364cb579-9e73-4481-a8ee-64e768763283" name="Changes" comment="" />
+      <created>1733113624850</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1733113624850</updated>
+      <workItem from="1733113625938" duration="12718000" />
+      <workItem from="1733128611246" duration="20000" />
+      <workItem from="1733232669377" duration="995000" />
+      <workItem from="1733234381507" duration="789000" />
+      <workItem from="1733310091675" duration="556000" />
+    </task>
+    <task id="LOCAL-00001" summary="getting rows and columns in main">
+      <option name="closed" value="true" />
+      <created>1733117409770</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1733117409770</updated>
+    </task>
+    <task id="LOCAL-00002" summary="genrate_map function">
+      <option name="closed" value="true" />
+      <created>1733118763526</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1733118763526</updated>
+    </task>
+    <task id="LOCAL-00003" summary="changing somethings">
+      <option name="closed" value="true" />
+      <created>1733119780531</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1733119780531</updated>
+    </task>
+    <task id="LOCAL-00004" summary="changing somethings">
+      <option name="closed" value="true" />
+      <created>1733119847659</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1733119847659</updated>
+    </task>
+    <task id="LOCAL-00005" summary="debug">
+      <option name="closed" value="true" />
+      <created>1733120005784</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1733120005784</updated>
+    </task>
+    <task id="LOCAL-00006" summary="get blocked test">
+      <option name="closed" value="true" />
+      <created>1733120875598</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1733120875598</updated>
+    </task>
+    <task id="LOCAL-00007" summary="get blocked function">
+      <option name="closed" value="true" />
+      <created>1733121500048</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1733121500048</updated>
+    </task>
+    <task id="LOCAL-00008" summary="welcom">
+      <option name="closed" value="true" />
+      <created>1733122310688</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1733122310688</updated>
+    </task>
+    <task id="LOCAL-00009" summary="head function">
+      <option name="closed" value="true" />
+      <created>1733122545211</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1733122545211</updated>
+    </task>
+    <task id="LOCAL-00010" summary="get villages function">
+      <option name="closed" value="true" />
+      <created>1733124492793</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1733124492793</updated>
+    </task>
+    <task id="LOCAL-00011" summary="villages info">
+      <option name="closed" value="true" />
+      <created>1733125525596</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1733125525596</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="getting rows and columns" />
+    <MESSAGE value="getting rows and columns in main" />
+    <MESSAGE value="genrate_map function" />
+    <MESSAGE value="changing somethings" />
+    <MESSAGE value="debug" />
+    <MESSAGE value="get blocked test" />
+    <MESSAGE value="get blocked function" />
+    <MESSAGE value="welcom" />
+    <MESSAGE value="head function" />
+    <MESSAGE value="get villages function" />
+    <MESSAGE value="villages info" />
+    <option name="LAST_COMMIT_MESSAGE" value="villages info" />
+  </component>
+</project>

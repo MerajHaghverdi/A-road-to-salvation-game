@@ -1,0 +1,19 @@
+Index: First step game map/main.c
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#include <stdio.h>\r\n#include <windows.h>\r\n#include <conio.h>\r\n#include <time.h>\r\n#include <ctime>\r\n\r\nint main()\r\n{\r\n    return 0;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/First step game map/main.c b/First step game map/main.c
+--- a/First step game map/main.c	(revision 423781a2b480f23ad94e4269dd5c1b78318dc5c5)
++++ b/First step game map/main.c	(date 1733116680680)
+@@ -2,7 +2,7 @@
+ #include <windows.h>
+ #include <conio.h>
+ #include <time.h>
+-#include <ctime>
++
+ 
+ int main()
+ {
