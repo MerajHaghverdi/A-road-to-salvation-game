@@ -182,9 +182,19 @@ void move_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int numkingdom, int k
                             current_location[i][0] = new_x;
                             current_location[i][1] = new_y;
 
-                            conquer_villages(numKingdom, numVillages,village_goldRates,village_foodRates, 
+                            if (counter_conquered_village[i]==0){
+                                conquer_villages(numKingdom, numVillages,village_goldRates,village_foodRates, 
                                             village_coordinates,kingdom_coordinates,conquered_village, 
                                             counter_conquered_village,kingdom_gold_rate,kingdom_food_rate);
+                            } else {
+                            for (int j=0; j<counter_conquered_village[i]; j++){
+                                if (conquered_village[i][j][0]!=new_x && conquered_village[i][j][1]!=new_y){
+                                             conquer_villages(numKingdom, numVillages,village_goldRates,village_foodRates, 
+                                            village_coordinates,kingdom_coordinates,conquered_village, 
+                                            counter_conquered_village,kingdom_gold_rate,kingdom_food_rate);
+                                }
+                            }
+                            }
 
                             break; // Turn used
                         }
