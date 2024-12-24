@@ -493,7 +493,7 @@ int main() {
         scanf("%d", &continueGame);
         if (!continueGame) break;
         distance_maker();
-        //clrscr();
+        clrscr();
     }
  }
     return 0;
