@@ -452,6 +452,9 @@ int main() {
     scanf("%d", &action);
 
     if (action == 1) {
+        printf("How do you want to play the game\n1-play with AI\n2-tow players\n3-three players\n4-four players\n");
+        int tempNum;
+        scanf("%d", &tempNum);
         printf("Enter rows (max %d): ", MAX_ROWS);
         scanf("%d", &rows);
         if (rows > MAX_ROWS) rows = MAX_ROWS;
@@ -464,9 +467,6 @@ int main() {
 
         generate_map(map);
         get_blocked(map);
-        printf("How do you want to play the game\n1-play with AI\n2-tow players\n3-three players\n4-four players\n");
-        int tempNum;
-        scanf("%d", &tempNum);
         if (tempNum==1){
             numKingdom=2;
         } else {
