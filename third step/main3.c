@@ -88,7 +88,7 @@ void print_map(char map[MAX_ROWS + 1][MAX_COLUMNS + 1]) {
         printf("\n");
     }
 }
-void move_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int numkingdom, int kingdom_coordinates[][2],
+void move_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int kingdom_coordinates[][2],
                   int current_location[][2],int kingdom_workers[],int conquered_village[numKingdom][numVillages][2],
                   int counter_conquered_village[],int kingdom_gold_rate[],int kingdom_food_rate[],int village_coordinates[][2],
                   int village_goldRates[],int village_foodRates[]) {
@@ -96,12 +96,12 @@ void move_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int numkingdom, int k
     int move, scape;
     int up,down,right,left;
 
-    for (int i = 0; i < numkingdom; i++) {
-        current_location[i][0] = kingdom_coordinates[i][0]; // Set starting x
-        current_location[i][1] = kingdom_coordinates[i][1]; // Set starting y
-    }
+    // for (int i = 0; i < numkingdom; i++) {
+    //     current_location[i][0] = kingdom_coordinates[i][0]; // Set starting x
+    //     current_location[i][1] = kingdom_coordinates[i][1]; // Set starting y
+    // }
 
-    for (int i = 0; i < numkingdom; i++) {
+    for (int i = 0; i < numKingdom; i++) {
         printf("Choose the arrow keys to move (kingdom %d) or choose Esc to get out:\n", i + 1);
         scape = 1;
 
@@ -174,8 +174,8 @@ void move_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int numkingdom, int k
                             if (map[new_x][new_y] <= '0') {
                                 map[new_x][new_y] = 'R';
                                  // Build road
-                            kingdom_coordinates[i][0] = new_x;
-                            kingdom_coordinates[i][1] = new_y;
+                            // kingdom_coordinates[i][0] = new_x;
+                            // kingdom_coordinates[i][1] = new_y;
                             current_location[i][0] = new_x;
                             current_location[i][1] = new_y;
                             printf("Built road at (%d, %d).\n", new_x, new_y);
@@ -191,26 +191,27 @@ void move_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int numkingdom, int k
                         }
                         if (map[new_x][new_y] == 'V') {
                             
-                            kingdom_coordinates[i][0] = new_x;
-                            kingdom_coordinates[i][1] = new_y;
+                            // kingdom_coordinates[i][0] = new_x;
+                            // kingdom_coordinates[i][1] = new_y;
                             current_location[i][0] = new_x;
                             current_location[i][1] = new_y;
 
                             if (counter_conquered_village[i]==0){
                                 printf("the vilage with cooardination : (%d, %d) is conquered by kingdom %d .\n", new_x, new_y,i + 1);
-                                conquer_villages(numKingdom, numVillages,village_goldRates,village_foodRates, 
-                                            village_coordinates,kingdom_coordinates,conquered_village, 
+                                            conquer_villages(village_goldRates,village_foodRates, 
+                                            village_coordinates,current_location,conquered_village, 
                                             counter_conquered_village,kingdom_gold_rate,kingdom_food_rate);
                             } else {
                             for (int j=0; j<counter_conquered_village[i]; j++){
                                 if (conquered_village[i][j][0]!=new_x && conquered_village[i][j][1]!=new_y){
                                             printf("the vilage with cooardination : (%d, %d) is conquered by kingdom %d .\n", new_x, new_y,i + 1);  
-                                            conquer_villages(numKingdom, numVillages,village_goldRates,village_foodRates, 
-                                            village_coordinates,kingdom_coordinates,conquered_village, 
+                                            conquer_villages(village_goldRates,village_foodRates, 
+                                            village_coordinates,current_location,conquered_village, 
                                             counter_conquered_village,kingdom_gold_rate,kingdom_food_rate);
                                 }
                             }
                             }
+                            
 
                             break; // Turn used
                         }
@@ -330,10 +331,10 @@ void kingdom_properties(int numKingdom,int kingdom_workers[],int kingdom_soldier
     }
 }
 
-void acting_kingdoms(int kingdom_gold[],int kingdom_food[],int numKingdom,int kingdom_workers[],int kingdom_soldiers[],int village_goldRates[],int village_foodRates[], 
+void acting_kingdoms(int kingdom_gold[],int kingdom_food[],int kingdom_workers[],int kingdom_soldiers[],int village_goldRates[],int village_foodRates[], 
                       int village_coordinates[][2],int kingdom_coordinates[][2],int conquered_village[numKingdom][numVillages][2], 
                       int counter_conquered_village[],int kingdom_gold_rate[],int kingdom_food_rate[],
-                      char map[MAX_ROWS + 1][MAX_COLUMNS + 1],int current_location[][2],int numkigdom)
+                      char map[MAX_ROWS + 1][MAX_COLUMNS + 1],int current_location[][2])
 {
     int act;
     for(int i = 0;i < numKingdom;i++)
@@ -374,7 +375,7 @@ void acting_kingdoms(int kingdom_gold[],int kingdom_food[],int numKingdom,int ki
             }
             break;
         case 4:
-    move_kingdom(map,numKingdom,kingdom_coordinates,
+    move_kingdom(map,kingdom_coordinates,
                   current_location,kingdom_workers,conquered_village,
                   counter_conquered_village,kingdom_gold_rate,kingdom_food_rate,village_coordinates,
                   village_goldRates,village_foodRates);
@@ -397,21 +398,21 @@ void update_resources(int numKingdom, int kingdom_gold_rate[], int kingdom_food_
     }
 }
 
-void conquer_villages(int numKingdom, int numVillages, 
-                      int village_goldRates[], int village_foodRates[], 
-                      int village_coordinates[][2], int kingdom_coordinates[][2], 
+
+void conquer_villages(int village_goldRates[], int village_foodRates[], 
+                      int village_coordinates[][2], int current_location[][2], 
                       int conquered_village[numKingdom][numVillages][2], 
                       int counter_conquered_village[], int kingdom_gold_rate[], int kingdom_food_rate[]) {
     for (int i = 0; i < numKingdom; i++) {
         for (int j = 0; j < numVillages; j++) {
             int vx = village_coordinates[j][0];
             int vy = village_coordinates[j][1];
-            int kx = kingdom_coordinates[i][0];
-            int ky = kingdom_coordinates[i][1];
+            int cx = current_location[i][0];
+            int cy = current_location[i][1];
 
-            if (abs(vx - kx) + abs(vy - ky) == 0 ) {
-                    conquered_village[i][j][0] = vx;
-                    conquered_village[i][j][1] = vy;
+            if (abs(vx - cx) == 0 && abs(vy - cy) == 0 ) {
+                    conquered_village[i][j][0] = cx;
+                    conquered_village[i][j][1] = cy;
                     counter_conquered_village[i]++;
 
             
@@ -468,6 +469,7 @@ int main() {
             kingdom_food[i] = 0;
         }
 
+
         printf("Enter the number of villages: ");
         scanf("%d", &numVillages);
 
@@ -484,13 +486,18 @@ int main() {
         print_map(map);
         VillageInfo(numVillages, village_goldRates, village_foodRates, village_coordinates);
         kingdominfo(numKingdom,kingdom_gold_rate,kingdom_food_rate,kingdom_gold,kingdom_food,kingdom_coordinates);
-    
+
+        for (int i = 0; i < numKingdom; i++) {
+        current_location[i][0] = kingdom_coordinates[i][0]; // Set starting x
+        current_location[i][1] = kingdom_coordinates[i][1]; // Set starting y
+        }
+
         distance_maker();
         //GAME IS STARTING 🗡️
         printf("\n--- Game Turn ---\n");
-        for(int i = 0;i < numKingdom;i++) {
+        for(int turn = 0;turn < numKingdom;turn++) {
 
-        printf("\nits turn kingdom %d\n", i + 1);
+        printf("\nits turn kingdom %d\n", turn + 1);
         print_map(map);
         update_resources(numKingdom,kingdom_gold_rate,kingdom_food_rate,kingdom_gold,kingdom_food);
         VillageInfo(numVillages, village_goldRates, village_foodRates, village_coordinates);
@@ -498,15 +505,14 @@ int main() {
 
         kingdom_properties(numKingdom,kingdom_workers,kingdom_soldiers,conquered_village,counter_conquered_village);
 
-        acting_kingdoms(kingdom_gold,kingdom_food,numKingdom,kingdom_workers,kingdom_soldiers,village_goldRates,village_foodRates, 
+        acting_kingdoms(kingdom_gold,kingdom_food,kingdom_workers,kingdom_soldiers,village_goldRates,village_foodRates, 
                       village_coordinates,kingdom_coordinates,conquered_village, 
                       counter_conquered_village,kingdom_gold_rate,kingdom_food_rate,
-                      map,current_location,numKingdom);
+                      map,current_location);
 
-        printf("\nDo you want to continue? (1 = Yes, 0 = No): ");
-        if(i == numKingdom - 1) i = -1;
-        int continueGame;
-        scanf("%d", &continueGame);
+        if(turn == numKingdom - 1) turn = -1;
+        int continueGame=1;
+        if (counter_conquered_village[turn] == numVillages) continueGame=0;
         if (!continueGame) break;
         distance_maker();
         //clrscr();
