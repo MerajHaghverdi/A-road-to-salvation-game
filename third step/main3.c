@@ -168,9 +168,7 @@ void move_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int kingdom_coordinat
                             map[new_x][new_y] -= kingdom_workers[i];
                             if (map[new_x][new_y] <= '0') {
                                 map[new_x][new_y] = 'R';
-                                 // Build road
-                            // kingdom_coordinates[i][0] = new_x;
-                            // kingdom_coordinates[i][1] = new_y;
+
                             current_location[i][0] = new_x;
                             current_location[i][1] = new_y;
                             printf("Built road at (%d, %d).\n", new_x, new_y);
@@ -186,8 +184,6 @@ void move_kingdom(char map[MAX_ROWS + 1][MAX_COLUMNS + 1], int kingdom_coordinat
                         }
                         if (map[new_x][new_y] == 'V') {
                             
-                            // kingdom_coordinates[i][0] = new_x;
-                            // kingdom_coordinates[i][1] = new_y;
                             current_location[i][0] = new_x;
                             current_location[i][1] = new_y;
 
