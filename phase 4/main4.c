@@ -8,7 +8,10 @@
 #define MAX_VILLAGES 20
 
 char map[MAX_ROWS + 1][MAX_COLUMNS + 1];
+char hardnes_backup[MAX_COLUMNS+1][MAX_COLUMNS+1];
 int rows, columns, numVillages, numKingdom, turn;
+char Kingdoms_name[4]={'A','B','C','D'};
+char Kingdoms_road_name[4]={'a','b','c','d'};
 int village_goldRates[MAX_VILLAGES];
 int village_foodRates[MAX_VILLAGES];
 int village_coordinates[MAX_VILLAGES][2];
@@ -54,7 +57,7 @@ void genrate_hardness(){
             if (map[i][j]=='O'){
                 int num = generate_number();
                 map[i][j] = num + '0'; 
-
+                hardnes_backup[i][j] = num + '0';
             }
         }
     }
@@ -71,17 +74,17 @@ void print_map() {
         printf("%2d ", i);
         for (int j = 1; j <= columns; j++) {
             switch (map[i][j]) {
-                case 'm':
+                case 'a':
                     printf("🔵 ");
                     break;
-                case 'n':
+                case 'b':
                     printf("🔴 ");
                     break;
-                case 'o':
+                case 'c':
                     printf("⚪ ");
                     break;
-                case 'p':
-                    printf("⚫ ");
+                case 'd':
+                    printf("🟣 ");
                     break;                                                            
                 case '1':
                     printf("🟩 ");
@@ -98,9 +101,18 @@ void print_map() {
                 case 'X':
                     printf("❌ ");
                     break;
+                case 'A':
+                    printf("🏰 ");
+                    break;
+                case 'B':
+                    printf("🏰 ");
+                    break;
                 case 'C':
                     printf("🏰 ");
                     break;
+                 case 'D':
+                    printf("🏰 ");
+                    break;                   
                 case 'V':
                     printf("🏠 ");
                     break;
@@ -156,9 +168,8 @@ void move_kingdom() {
                     }
 
                     if (!scape) break;
-                    char char_kings[4] = {'m', 'n', 'o', 'p'};
                     if (new_x >= 1 && new_y >= 1 && new_x <= rows && new_y <= columns) {
-                        if (map[new_x][new_y] == char_kings[turn]) {
+                        if (map[new_x][new_y] == Kingdoms_road_name[turn]) {
                             printf("Moving on road at (%d, %d).\n", new_x, new_y);
                             current_location[turn][0] = new_x;
                             current_location[turn][1] = new_y;
@@ -178,7 +189,7 @@ void move_kingdom() {
                             continue;
                             }
                         }
-                        if(map[new_x][new_y] == 'C')
+                        if(map[new_x][new_y] == Kingdoms_name[turn])
                         {
                             printf("you are now in your kingdom! \n");
                             current_location[turn][0] = new_x;
@@ -189,13 +200,13 @@ void move_kingdom() {
                             map[new_x][new_y] -= kingdom_workers[turn];
                             if (map[new_x][new_y] <= '0') {
                                 if (turn==0){
-                                   map[new_x][new_y] = 'm';
+                                   map[new_x][new_y] = 'a';
                                 } else if (turn==1){
-                                    map[new_x][new_y] = 'n';
+                                    map[new_x][new_y] = 'b';
                                 } else if (turn==2){
-                                    map[new_x][new_y] = 'o';
+                                    map[new_x][new_y] = 'c';
                                 } else if (turn==3){
-                                    map[new_x][new_y] = 'p';
+                                    map[new_x][new_y] = 'd';
                                 }
 
                             current_location[turn][0] = new_x;
@@ -234,10 +245,10 @@ void move_kingdom() {
                             printf("Cannot move to this position. Blocked cells. .\n");
                             continue; 
                         }
-                        if(map[new_x][new_y] != char_kings[turn]) {
+                        if(map[new_x][new_y] != Kingdoms_road_name[turn]) {
                             current_location[turn][0] = new_x;
                             current_location[turn][1] = new_y;
-                            map[new_x][new_y] = char_kings[turn];
+                            map[new_x][new_y] = Kingdoms_road_name[turn];
                             break;
                         }
                     }
@@ -281,7 +292,7 @@ void get_kingdom() {
             printf("out of the map. try again\n");
             i--;
         }else if (map[x][y] == 'O') {
-            map[x][y] = 'C';
+            map[x][y] = Kingdoms_name[i];
              printf("enter the gold production rate of kingdom %d : ",i+1);
              scanf("%d",&kingdom_gold_rate[i]);
              printf("enter the food production rate of kingdom %d : ",i+1);
