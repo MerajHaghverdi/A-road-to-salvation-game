@@ -262,6 +262,154 @@ void move_kingdom() {
         }
 }
 
+void start_battle(int kingdom1, int kingdom2) {
+
+    int soldiers_kingdom1 = kingdom_soldiers[kingdom1];
+    int soldiers_kingdom2 = kingdom_soldiers[kingdom2];
+
+    if (soldiers_kingdom1 > soldiers_kingdom2) {
+        // Kingdom 1 wins
+        int loss_kingdom2 = soldiers_kingdom1 - soldiers_kingdom2; // Difference is lost by kingdom 2
+
+        if(loss_kingdom2 > kingdom_soldiers[kingdom2]){
+            loss_kingdom2 = kingdom_soldiers[kingdom2];
+        }
+        kingdom_soldiers[kingdom2] -= loss_kingdom2;
+        if (kingdom_soldiers[kingdom2] < 0) kingdom_soldiers[kingdom2] = 0;
+
+        printf("Kingdom %d wins the battle!\n", kingdom1 + 1);
+        printf("Kingdom %d loses %d soldiers\nKingdom %d loses 0 soldiers.\n",
+               kingdom2 + 1, loss_kingdom2, kingdom1 + 1);
+
+
+    } else if (soldiers_kingdom1 < soldiers_kingdom2) {
+        // Kingdom 2 wins
+        int loss_kingdom1 = soldiers_kingdom2 - soldiers_kingdom1; // Difference is lost by kingdom 1
+
+        if(loss_kingdom1 > kingdom_soldiers[kingdom1]){
+            loss_kingdom1 = kingdom_soldiers[kingdom1];
+        }
+        kingdom_soldiers[kingdom1] -= loss_kingdom1;
+        if (kingdom_soldiers[kingdom1] < 0) kingdom_soldiers[kingdom1] = 0;
+
+        printf("Kingdom %d wins the battle!\n", kingdom2 + 1);
+        printf("Kingdom %d loses %d soldiers\nKingdom %d loses 0 soldiers.\n",
+               kingdom1 + 1, loss_kingdom1, kingdom2 + 1);
+
+
+    } else {
+        // Draw
+        printf("The battle ends in a draw! No losses for either kingdom.\n");
+    }
+}
+void check_village_war(int current_kingdom) {
+    int current_x = current_location[current_kingdom][0];
+    int current_y = current_location[current_kingdom][1];
+
+    for (int i = 0; i < numVillages; i++) {
+        int village_x = village_coordinates[i][0];
+        int village_y = village_coordinates[i][1];
+
+    
+        if (abs(current_x - village_x) + abs(current_y - village_y) == 1) {
+
+            int village_owner = -1;
+
+        
+            for (int other_kingdom = 0; other_kingdom < numKingdom; other_kingdom++) {
+                for (int k = 0; k < counter_conquered_village[other_kingdom]; k++) {
+                    if (conquered_village[other_kingdom][k][0] == village_x &&
+                        conquered_village[other_kingdom][k][1] == village_y) {
+                        village_owner = other_kingdom; 
+                        break;
+                    }
+                }
+                if (village_owner != -1) break; 
+            }
+
+            if (village_owner == -1) {
+                conquer_villages();
+                return; 
+            }
+
+            
+            printf("Village War! Kingdom %d is fighting with Kingdom %d for the village with the cooardinate (%d %d).\n", current_kingdom + 1, village_owner + 1,village_x,village_y);
+            start_battle(current_kingdom, village_owner);
+
+            
+            if (kingdom_soldiers[current_kingdom] > 0 && kingdom_soldiers[village_owner] <= 0) {
+                printf("Kingdom %d wins and conquers the village with the cooardination (%d %d)!\n", current_kingdom + 1,village_x,village_y);
+
+                
+                for (int k = 0; k < counter_conquered_village[village_owner]; k++) {
+                    if (conquered_village[village_owner][k][0] == village_x &&
+                        conquered_village[village_owner][k][1] == village_y) {
+                
+                        kingdom_gold_rate[village_owner] -= village_goldRates[i];
+                        kingdom_food_rate[village_owner] -= village_foodRates[i];
+                        kingdom_gold_rate[current_kingdom] += village_goldRates[i];
+                        kingdom_food_rate[current_kingdom] += village_foodRates[i];
+
+                        for (int m = k; m < counter_conquered_village[village_owner] - 1; m++) {
+                            conquered_village[village_owner][m][0] = conquered_village[village_owner][m + 1][0];
+                            conquered_village[village_owner][m][1] = conquered_village[village_owner][m + 1][1];
+                        }
+                        counter_conquered_village[village_owner]--;
+                        break;
+                    }
+                }
+
+                conquered_village[current_kingdom][counter_conquered_village[current_kingdom]][0] = village_x;
+                conquered_village[current_kingdom][counter_conquered_village[current_kingdom]][1] = village_y;
+                counter_conquered_village[current_kingdom]++;
+                
+
+
+            }
+            return; 
+        }
+    }
+}
+
+
+void check_war(int current_kingdom) {
+    int current_x = current_location[current_kingdom][0];
+    int current_y = current_location[current_kingdom][1];
+
+
+    for (int i = 1; i <= rows; i++) {
+        for (int j = 1; j <= columns; j++) {
+
+    
+            for (int other_kingdom = 0; other_kingdom < numKingdom; other_kingdom++) {
+                if (current_kingdom == other_kingdom) continue;
+
+                if (map[i][j] == Kingdoms_name[other_kingdom] && 
+                    abs(current_x - i) + abs(current_y - j) == 1) {
+                    printf("All-Out War! Kingdom %d and Kingdom %d are fighting near a kingdom.\n", current_kingdom + 1, other_kingdom + 1);
+                    start_battle(current_kingdom, other_kingdom);
+                    return;
+                }
+            }
+            if(map[i][j] == 'V' && abs(current_x - i) + abs(current_y - j) == 1){
+            check_village_war(current_kingdom);
+            return;
+            }
+            for (int other_kingdom = 0; other_kingdom < numKingdom; other_kingdom++) {
+                if (current_kingdom == other_kingdom) continue; // خودش را بررسی نکند
+
+                if (map[i][j] == Kingdoms_road_name[other_kingdom] && 
+                    abs(current_x - i) + abs(current_y - j) == 1) {
+                    printf("Road War! Kingdom %d and Kingdom %d are fighting near a road.\n", current_kingdom + 1, other_kingdom + 1);
+                    start_battle(current_kingdom, other_kingdom);
+                    return; 
+                }
+            }
+
+        }
+    }
+}
+
 void get_blocked() {
     int numBlocked;
     printf("How many blocked cells: ");
@@ -361,7 +509,7 @@ void kingdom_properties()
         printf("kingdom %d have %d villages in total.\n",i+1,counter_conquered_village[i]);
         for(int j = 0;j < counter_conquered_village[i];j++)
         {
-            printf("the kingdom %d have village with cooardination %d %d \n",i+1,conquered_village[i][j][0],conquered_village[i][j][1]);
+            printf("the kingdom %d have village with cooardination (%d,%d) \n",i+1,conquered_village[i][j][0],conquered_village[i][j][1]);
         }
         printf("\n");
     }
@@ -408,6 +556,7 @@ void acting_kingdoms()
             break;
         case 4:
     move_kingdom();
+    check_war(turn);
     print_map();
     break;
 
@@ -528,7 +677,7 @@ int main() {
         if(turn == numKingdom - 1) turn = -1;
         if (!continueGame) break;
         distance_maker();
-        //clrscr();
+        // clrscr();
     }
  }
     return 0;
