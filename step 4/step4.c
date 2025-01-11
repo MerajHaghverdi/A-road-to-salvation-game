@@ -268,8 +268,8 @@ void start_battle(int kingdom1, int kingdom2) {
     int soldiers_kingdom2 = kingdom_soldiers[kingdom2];
 
     if (soldiers_kingdom1 > soldiers_kingdom2) {
-        // Kingdom 1 wins
-        int loss_kingdom2 = soldiers_kingdom1 - soldiers_kingdom2; // Difference is lost by kingdom 2
+        
+        int loss_kingdom2 = soldiers_kingdom1 - soldiers_kingdom2;
 
         if(loss_kingdom2 > kingdom_soldiers[kingdom2]){
             loss_kingdom2 = kingdom_soldiers[kingdom2];
@@ -284,8 +284,7 @@ void start_battle(int kingdom1, int kingdom2) {
 
 
     } else if (soldiers_kingdom1 < soldiers_kingdom2) {
-        // Kingdom 2 wins
-        int loss_kingdom1 = soldiers_kingdom2 - soldiers_kingdom1; // Difference is lost by kingdom 1
+        int loss_kingdom1 = soldiers_kingdom2 - soldiers_kingdom1; 
 
         if(loss_kingdom1 > kingdom_soldiers[kingdom1]){
             loss_kingdom1 = kingdom_soldiers[kingdom1];
@@ -468,9 +467,8 @@ void remove_all_roads(int kingdom) {
 
     for (int i = 1; i <= rows; i++) {
         for (int j = 1; j <= columns; j++) {
-            // بررسی اینکه خانه متعلق به جاده قلمرو بازنده است
             if (map[i][j] == Kingdoms_road_name[kingdom]) {
-                map[i][j] = hardnes_backup[i][j]; // بازگرداندن درجه سختی اولیه
+                map[i][j] = hardnes_backup[i][j]; 
             }
         }
     }
