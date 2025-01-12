@@ -747,8 +747,6 @@ int main() {
         scanf("%d", &columns);
         if (columns > MAX_COLUMNS) columns = MAX_COLUMNS;
 
-        char map[MAX_ROWS + 1][MAX_COLUMNS + 1];
-
         generate_map();
         get_blocked();
         int players;
