@@ -9,7 +9,7 @@
 
 char map[MAX_ROWS + 1][MAX_COLUMNS + 1];
 char hardnes_backup[MAX_COLUMNS+1][MAX_COLUMNS+1];
-int rows, columns, numVillages, numKingdom, turn, new_road_x,new_road_y,remaining_kingdoms;
+int rows, columns, numVillages, numKingdom, turn, new_road_x,new_road_y;
 char Kingdoms_name[4]={'A','B','C','D'};
 char Kingdoms_road_name[4]={'a','b','c','d'};
 int village_goldRates[MAX_VILLAGES];
@@ -728,7 +728,6 @@ void delete_kingdom(int kingdom) {
  
     counter_conquered_village[kingdom] = 0;
     switch_kingdom[kingdom] = 0;
-    remaining_kingdoms--;
     kingdom_gold[kingdom] = 0;
     kingdom_food[kingdom] = 0;
     kingdom_workers[kingdom] = 0;
@@ -827,7 +826,6 @@ void get_blocked() {
 }
 
 void get_kingdom() {
-    remaining_kingdoms=numKingdom;
     for (int i = 0; i < numKingdom; i++) {
         int x, y;
         switch_kingdom[i]=1;
@@ -1011,7 +1009,13 @@ int main() {
                 acting_kingdoms();
             }
         if(turn == numKingdom - 1) turn = -1;
-        if (remaining_kingdoms==1) break;
+        int alive=0;
+        for (int i=0; i<numKingdom;i++){
+        if (switch_kingdom[i]==1){
+            alive++;
+            }
+        }
+        if (alive==1) break;
         distance_maker();
         // clrscr();
     }
