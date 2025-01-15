@@ -937,7 +937,7 @@ void acting_kingdoms()
 {
     int act;
         print_map();
-    printf("what do you want to act ? : \n");
+    printf("what do you want to act %s ? : \n",House[turn]);
     printf("enter 1 for buying 1 food with spending 1 gold : \n");
     printf("enter 2 for hiring a worker for your kingdom with spending 3 food : \n");
     printf("enter 3 for hiring a soldier for your kingdom with spending 2 gold : \n");
