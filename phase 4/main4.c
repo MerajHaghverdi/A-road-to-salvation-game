@@ -300,7 +300,6 @@ void start_game(){
     }
 }
 
-// Function to simulate keyboard arrow key for computer
 int get_computer_direction() {
     int direction;
     int new_x = current_location[turn][0];
@@ -308,7 +307,7 @@ int get_computer_direction() {
     int valid = 0;
     
     while (!valid) {
-        direction = rand() % 4;  // 0: up, 1: down, 2: left, 3: right
+        direction = rand() % 4; 
         new_x = current_location[turn][0];
         new_y = current_location[turn][1];
         
@@ -330,8 +329,6 @@ int get_computer_direction() {
                 direction = 77;
                 break;
         }
-        
-        // Check if move is valid
         if (new_x >= 1 && new_y >= 1 && new_x <= rows && new_y <= columns && 
             map[new_x][new_y] != 'X' && map[new_x][new_y] != 'L') {
             valid = 1;
@@ -341,9 +338,8 @@ int get_computer_direction() {
     return direction;
 }
 
-// Function to handle computer's turn
 void computer_play() {
-    int action = rand() % 4 + 1;  // Random action 1-4
+    int action = rand() % 4 + 1;
     printf("\nComputer chose action: %d\n", action);
     
         switch (action) {
@@ -376,15 +372,13 @@ void computer_play() {
             break;
         case 4:
             int new_x, new_y;
-    int move, scape;
-    int up,down,right,left;
+            int move, scape;
+            int up,down,right,left;
 
         printf("Choose the arrow keys to move (%s) or choose Esc to get out:\n", House[turn]);
         scape = 1;
 
         while (scape) {
-            
-                        // Simulate keyboard hit for move_kingdom
                     int direction = get_computer_direction();
                     move = direction;
                     new_x = current_location[turn][0];
@@ -502,8 +496,6 @@ void computer_play() {
                             break;
                         }
                     }
-                
-            
         }
     check_war(turn);
     for (int m=0; m<numKingdom; m++){
