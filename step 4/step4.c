@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include<string.h>
 
 #define MAX_ROWS 17
 #define MAX_COLUMNS 17
@@ -9,7 +10,7 @@
 
 char map[MAX_ROWS + 1][MAX_COLUMNS + 1];
 char hardnes_backup[MAX_COLUMNS+1][MAX_COLUMNS+1];
-int rows, columns, numVillages, numKingdom, turn, new_road_x,new_road_y;
+int rows, columns, numVillages, numKingdom, turn, new_road_x,new_road_y,spell;
 char Kingdoms_name[4]={'A','B','C','D'};
 char Kingdoms_road_name[4]={'a','b','c','d'};
 int village_goldRates[MAX_VILLAGES];
@@ -27,6 +28,7 @@ int kingdom_food[MAX_KINGDOMS];
 int current_location[MAX_KINGDOMS][2];
 int switch_kingdom[MAX_KINGDOMS];
 char House[4][100]={"🐺 House Stark","🐲 House Targaryen","🦁 House Lannister","🦑 House Greyjoy"};
+
  
 void generate_map() {
     for (int i = 0; i <= rows; i++) {
@@ -40,7 +42,55 @@ void generate_map() {
 
     }
 }
+int select_random_kingdom() {
+    int chosen = -1;
+    double probability = 1.0 / numKingdom ;
+    int first = 0;
+    for (int i = 0; i < numKingdom; i++) {
+        double random_chance = (double)rand() / RAND_MAX;
+        if (random_chance <= probability && random_chance >= first) { 
+            chosen = i;
+            break;
+        }
+        first += probability;
+        probability += probability;
+        if(i == numKingdom - 1) i = -1;
+    }
 
+    return chosen;
+}
+void select_random_spell(){
+    int chosen = -1;
+    double random_spell = (double)rand() / RAND_MAX;
+    int select = select_random_kingdom();
+    if(random_spell < 0.25){
+        printf("\ngold round🪙!%s gained 2 gold in this round!\n",House[select]);
+        kingdom_gold[select] += 2;
+        return;
+    }
+    if(random_spell < 0.50){
+        printf("\nfood round🍖!%s gained 2 food in this round!\n",House[select]);
+        kingdom_food[select] += 2;
+        return;
+    }
+    if(random_spell < 0.70){
+        printf("\nfreazing❄️!%s lost 1 food!\n",House[select]);
+        kingdom_food[select] -= 1;
+        if(kingdom_food[select] < 0) kingdom_food[select] = 0;
+        return;
+    }
+    if(random_spell < 0.90){
+        printf("\nillness😷!one of %s soldiers is dead!\n",House[select]);
+        kingdom_soldiers[select] -= 1;
+        if(kingdom_soldiers[select] < 0) kingdom_soldiers[select] = 0;
+        return;
+    }
+    if(random_spell < 1){
+        printf("\na group of soldiers are joining you🔥!%s gained 2 soldier\n",House[select]);
+        kingdom_soldiers[select] += 2;
+        return;
+    }
+}
 int generate_number() {
     double r = (double)rand() / RAND_MAX;
     if (r < 0.65)
@@ -281,6 +331,9 @@ void start_game(){
         } else {
             numKingdom=players;
         }
+        spell = 0;
+        printf("do you want to palying in spell mode? (1-yes,0-no)\n");
+        scanf("%d",&spell);
         get_kingdom();
         get_villages();
         genrate_hardness();
@@ -1012,24 +1065,32 @@ int main() {
         //GAME IS STARTING 🗡️
         printf("\n--- Game Turn ---\n");
         int round = 0;
+        int check = 1;
         for(;turn < numKingdom;turn++) {
                 for (int m=0; m<numKingdom; m++){
-                    check_connectivity(m);   
+                    check_connectivity(m);
                 }
             if (switch_kingdom[turn]==1){
                 //update resources will work at the first of each round!
-                if(turn == 0) round++;
+                if(check){
+                    round++;
+                    update_resources();
+                    if(spell)select_random_spell();
+                }
+                check = 0;
                 printf("\n");
                 printf("it's round %d\n",round);
                 printf("\nit's turn %s\n", House[turn]);
                 print_map();
-                if(turn == 0) update_resources();
                 VillageInfo();
                 kingdominfo();
                 kingdom_properties();
                 acting_kingdoms();
             }
-        if(turn == numKingdom - 1) turn = -1;
+        if(turn == numKingdom - 1){
+            turn = -1;
+            check = 1;
+        }
         int alive=0;
         for (int i=0; i<numKingdom;i++){
         if (switch_kingdom[i]==1){
