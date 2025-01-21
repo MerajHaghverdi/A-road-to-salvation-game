@@ -89,6 +89,12 @@ void select_random_spell(){
         return;
     }
 }
+void apply_spell(){
+    double random_apply = (double)rand() / RAND_MAX;
+    if(random_apply < 0.30){
+        select_random_spell();
+    }
+}
 int generate_number() {
     double r = (double)rand() / RAND_MAX;
     if (r < 0.65)
@@ -1281,7 +1287,7 @@ int main() {
                 if(check){
                     round++;
                     update_resources();
-                    if(spell)select_random_spell();
+                    if(spell)apply_spell();
                 }
                 check = 0;
                 printf("\n");
