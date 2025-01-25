@@ -318,6 +318,42 @@ void conquer_villages() {
     }
 }
 
+void delete_kingdom(int kingdom) {
+    for (int i = 1; i <= rows; i++) {
+        for (int j = 1; j <= columns; j++) {
+            if (map[i][j] == Kingdoms_road_name[kingdom]) {
+                map[i][j] = hardnes_backup[i][j];
+            }
+        }
+    }
+
+    for (int i = 0; i < counter_conquered_village[kingdom]; i++) {
+        int village_x = conquered_village[kingdom][i][0];
+        int village_y = conquered_village[kingdom][i][1];
+
+        for (int j = 0; j < numVillages; j++) {
+            if (village_coordinates[j][0] == village_x &&
+                village_coordinates[j][1] == village_y) {
+
+
+                kingdom_gold_rate[kingdom] -= village_goldRates[j];
+                kingdom_food_rate[kingdom] -= village_foodRates[j];
+                break;
+            }
+        }
+    }
+
+    counter_conquered_village[kingdom] = 0;
+    switch_kingdom[kingdom] = 0;
+    kingdom_gold[kingdom] = 0;
+    kingdom_food[kingdom] = 0;
+    kingdom_workers[kingdom] = 0;
+    kingdom_soldiers[kingdom] = 0;
+    map[kingdom_coordinates[kingdom][0]][kingdom_coordinates[kingdom][1]] = 'L';
+
+    printf("%s eliminated 🤣🤣🤣\n", House[kingdom]);
+}
+
 void Big_battel (int kingdom1, int kingdom2, int war_x, int war_y) {
     int soldiers_kingdom1 = kingdom_soldiers[kingdom1];
     int soldiers_kingdom2 = kingdom_soldiers[kingdom2];
