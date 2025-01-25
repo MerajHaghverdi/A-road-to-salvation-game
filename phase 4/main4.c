@@ -306,6 +306,85 @@ int is_village_owned(int x, int y, int kingdom) {
     return 0;
 }
 
+// Find shortest path using BFS
+int find_shortest_path(int start_x, int start_y, int kingdom, int path_x[], int path_y[]) {
+    int queue_x[MAX_ROWS * MAX_COLUMNS];
+    int queue_y[MAX_ROWS * MAX_COLUMNS];
+    int parent_x[MAX_ROWS + 1][MAX_COLUMNS + 1];
+    int parent_y[MAX_ROWS + 1][MAX_COLUMNS + 1];
+    int visited[MAX_ROWS + 1][MAX_COLUMNS + 1] = {0};
+    int front = 0, rear = 0;
+    int path_length = 0;
+    int found = 0;
+
+    // Initialize parent arrays
+    for(int i = 0; i <= rows; i++) {
+        for(int j = 0; j <= columns; j++) {
+            parent_x[i][j] = -1;
+            parent_y[i][j] = -1;
+        }
+    }
+
+    // Start BFS from war location
+    queue_x[rear] = start_x;
+    queue_y[rear] = start_y;
+    rear++;
+    visited[start_x][start_y] = 1;
+
+    // BFS to find path
+    while(front < rear) {
+        int curr_x = queue_x[front];
+        int curr_y = queue_y[front];
+        front++;
+
+        // Check if we reached kingdom or owned village
+        if(map[curr_x][curr_y] == Kingdoms_name[kingdom] ||
+           (map[curr_x][curr_y] == 'V' && is_village_owned(curr_x, curr_y, kingdom))) {
+            found = 1;
+
+            // Reconstruct path
+            int x = curr_x, y = curr_y;
+            while(parent_x[x][y] != -1) {
+                path_x[path_length] = x;
+                path_y[path_length] = y;
+                path_length++;
+                int temp_x = parent_x[x][y];
+                int temp_y = parent_y[x][y];
+                x = temp_x;
+                y = temp_y;
+            }
+            path_x[path_length] = start_x;
+            path_y[path_length] = start_y;
+            path_length++;
+            break;
+        }
+
+        // Check adjacent cells
+        int dx[] = {-1, 1, 0, 0};
+        int dy[] = {0, 0, -1, 1};
+
+        for(int i = 0; i < 4; i++) {
+            int new_x = curr_x + dx[i];
+            int new_y = curr_y + dy[i];
+
+            if(new_x >= 1 && new_x <= rows && new_y >= 1 && new_y <= columns &&
+               !visited[new_x][new_y] &&
+               (map[new_x][new_y] == Kingdoms_road_name[kingdom] ||
+                map[new_x][new_y] == Kingdoms_name[kingdom] ||
+                (map[new_x][new_y] == 'V' && is_village_owned(new_x, new_y, kingdom)))) {
+                queue_x[rear] = new_x;
+                queue_y[rear] = new_y;
+                rear++;
+                visited[new_x][new_y] = 1;
+                parent_x[new_x][new_y] = curr_x;
+                parent_y[new_x][new_y] = curr_y;
+            }
+        }
+    }
+
+    return found ? path_length : 0;
+}
+
 // Check connectivity of roads and villages
 void check_connectivity(int kingdom) {
     int visited[MAX_ROWS + 1][MAX_COLUMNS + 1] = {0};
