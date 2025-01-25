@@ -747,6 +747,214 @@ void conquer_villages() {
     }
 }
 
+int get_computer_direction() {
+    int direction;
+    int new_x = current_location[turn][0];
+    int new_y = current_location[turn][1];
+    int valid = 0;
+
+    while (!valid) {
+        direction = rand() % 4;
+        new_x = current_location[turn][0];
+        new_y = current_location[turn][1];
+
+        switch(direction) {
+            case 0: // Up
+                new_x--;
+                direction = 72;
+                break;
+            case 1: // Down
+                new_x++;
+                direction = 80;
+                break;
+            case 2: // Left
+                new_y--;
+                direction = 75;
+                break;
+            case 3: // Right
+                new_y++;
+                direction = 77;
+                break;
+        }
+        if (new_x >= 1 && new_y >= 1 && new_x <= rows && new_y <= columns &&
+            map[new_x][new_y] != 'X' && map[new_x][new_y] != 'L' && map[new_x][new_y] != Kingdoms_road_name[turn]) {
+            valid = 1;
+        }
+    }
+
+    return direction;
+}
+
+void computer_play() {
+    int action = rand() % 4 + 1;
+    printf("\n🤖 Computer chose action: %d\n", action);
+
+    switch (action) {
+        case 1:
+            if (kingdom_gold[turn] > 0) {
+                kingdom_food[turn]++;
+                kingdom_gold[turn]--;
+                printf("Bought 1 food. Remaining gold: %d\n", kingdom_gold[turn]);
+            } else {
+                printf("Not enough gold!\n");
+            }
+            break;
+        case 2:
+            if (kingdom_food[turn] >= 3) {
+                kingdom_workers[turn]++;
+                kingdom_food[turn] -= 3;
+                printf("Hired 1 worker. Remaining food: %d\n", kingdom_food[turn]);
+            } else {
+                printf("Not enough food!\n");
+            }
+            break;
+        case 3:
+            if (kingdom_gold[turn] >= 2) {
+                kingdom_soldiers[turn]++;
+                kingdom_gold[turn] -= 2;
+                printf("Hired 1 soldier. Remaining gold: %d\n", kingdom_gold[turn]);
+            } else {
+                printf("Not enough gold!\n");
+            }
+            break;
+        case 4:
+            int new_x, new_y;
+            int move, scape;
+            int up,down,right,left;
+
+            printf("Choose the arrow keys to move (%s) or choose Esc to get out:\n", House[turn]);
+            scape = 1;
+
+            while (scape) {
+                int direction = get_computer_direction();
+                move = direction;
+                new_x = current_location[turn][0];
+                new_y = current_location[turn][1];
+                up = 0,down = 0,right = 0,left = 0;
+                switch (move) {
+                    case (72):
+                        new_x--;
+                        up++;
+                        break;
+                    case (80):
+                        new_x++;
+                        down++;
+                        break;
+                    case (75):
+                        new_y--;
+                        left++;
+                        break;
+                    case (77):
+                        new_y++;
+                        right++;
+                        break;
+                    case (27):
+                        scape = 0;
+                        break;
+                    default:
+                        printf("Invalid move\n");
+                        continue;
+                }
+
+                if (!scape) break;
+                new_road_x = new_x;
+                new_road_y = new_y;
+                if (new_x >= 1 && new_y >= 1 && new_x <= rows && new_y <= columns) {
+                    if (map[new_x][new_y] == Kingdoms_road_name[turn]) {
+                        printf("Moving on road at (%d, %d).\n", new_x, new_y);
+                        current_location[turn][0] = new_x;
+                        current_location[turn][1] = new_y;
+                        continue;
+                    }
+                    int sw = 0;
+                    if (map[new_x][new_y] == 'V') {
+                        for (int j=0; j<counter_conquered_village[turn]; j++){
+                            if (conquered_village[turn][j][0] == new_x && conquered_village[turn][j][1] == new_y){
+                                sw = 1;
+                                break;
+                            }
+                        }
+                        if (sw == 1){
+                            printf("you are now in your village with coordinates of (%d, %d).\n", new_x, new_y);
+                            current_location[turn][0] = new_x;
+                            current_location[turn][1] = new_y;
+                            check_war(turn);
+                            continue;
+                        }
+                    }
+                    if(map[new_x][new_y] == Kingdoms_name[turn])
+                    {
+                        printf("you are now in %s kingdom! \n",House[turn]);
+                        current_location[turn][0] = new_x;
+                        current_location[turn][1] = new_y;
+                        continue;
+                    }
+                    if (map[new_x][new_y] >= '1' && map[new_x][new_y] <= '4') {
+                        map[new_x][new_y] -= kingdom_workers[turn];
+                        if (map[new_x][new_y] <= '0') {
+                            if (turn==0){
+                                map[new_x][new_y] = 'a';
+                            } else if (turn==1){
+                                map[new_x][new_y] = 'b';
+                            } else if (turn==2){
+                                map[new_x][new_y] = 'c';
+                            } else if (turn==3){
+                                map[new_x][new_y] = 'd';
+                            }
+
+                            current_location[turn][0] = new_x;
+                            current_location[turn][1] = new_y;
+                            printf("Built road at (%d, %d).\n", new_x, new_y);
+                            break;
+                        }
+                        else{
+                            if(up == 1)new_x++;
+                            if(down == 1)new_x--;
+                            if(right == 1)new_y--;
+                            if(left == 1)new_y++;
+                            break;
+                        }
+                    }
+                    if (map[new_x][new_y] == 'V' && !is_village_owned(new_x, new_y, turn)) {
+
+                        current_location[turn][0] = new_x;
+                        current_location[turn][1] = new_y;
+
+                        if (counter_conquered_village[turn] == 0){
+                            printf("the vilage with cooardination : (%d, %d) is conquered by %s .\n", current_location[turn][0], current_location[turn][1],House[turn]);
+                            conquer_villages();
+                        } else {
+                            for (int j=0; j<counter_conquered_village[turn]; j++){
+                                if (conquered_village[turn][j][0] != new_x || conquered_village[turn][j][1] != new_y){
+                                    printf("the vilage with cooardination : (%d, %d) is conquered by %s .\n",current_location[turn][0],current_location[turn][1],House[turn]);
+                                    conquer_villages();
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    if(map[new_x][new_y] != Kingdoms_road_name[turn]) {
+                        current_location[turn][0] = new_x;
+                        current_location[turn][1] = new_y;
+                        if(map[new_x][new_y] != 'A' && map[new_x][new_y] != 'B' && map[new_x][new_y] != 'C' && map[new_x][new_y] != 'D') {
+                            map[new_x][new_y] = Kingdoms_road_name[turn];
+                        }
+                        break;
+                    }
+                }
+            }
+            check_war(turn);
+            for (int m=0; m<numKingdom; m++){
+                check_connectivity(m);
+            }
+            print_map();
+            break;
+    }
+
+}
+
+
 void start_battle(int kingdom1, int kingdom2, int war_x, int war_y) {
 
     int soldiers_kingdom1 = kingdom_soldiers[kingdom1];
