@@ -296,6 +296,47 @@ void kingdom_properties()
     }
 }
 
+void remove_roads(int kingdom, int war_x, int war_y) {
+    int path_x[MAX_ROWS * MAX_COLUMNS];
+    int path_y[MAX_ROWS * MAX_COLUMNS];
+    int path_length;
+
+    // Find shortest path
+    path_length = find_shortest_path(war_x, war_y, kingdom, path_x, path_y);
+
+    if(path_length > 0) {
+        // Remove roads along path until reaching kingdom or owned village
+        for(int i = path_length - 1; i >= 0; i--) {
+            int x = path_x[i];
+            int y = path_y[i];
+
+            if(map[x][y] == Kingdoms_name[kingdom]) {
+                // Reached kingdom capital
+                current_location[kingdom][0] = x;
+                current_location[kingdom][1] = y;
+                break;
+            }
+            else if(map[x][y] == 'V' && is_village_owned(x, y, kingdom)) {
+                // Reached owned village
+                current_location[kingdom][0] = x;
+                current_location[kingdom][1] = y;
+                break;
+            }
+            else if(map[x][y] == Kingdoms_road_name[kingdom]) {
+                // Remove road and restore hardness
+                map[x][y] = hardnes_backup[x][y];
+            }
+        }
+
+        // Check and remove disconnected roads and villages
+        check_connectivity(kingdom);
+    }
+    else {
+        // No path found, move to kingdom capital
+        current_location[kingdom][0] = kingdom_coordinates[kingdom][0];
+        current_location[kingdom][1] = kingdom_coordinates[kingdom][1];
+    }
+}
 
 void conquer_villages() {
     for (int i = 0; i < numKingdom; i++) {
