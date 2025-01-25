@@ -296,6 +296,16 @@ void kingdom_properties()
     }
 }
 
+int is_village_owned(int x, int y, int kingdom) {
+    for(int i = 0; i < counter_conquered_village[kingdom]; i++) {
+        if(conquered_village[kingdom][i][0] == x &&
+           conquered_village[kingdom][i][1] == y) {
+            return (1);
+        }
+    }
+    return 0;
+}
+
 void remove_roads(int kingdom, int war_x, int war_y) {
     int path_x[MAX_ROWS * MAX_COLUMNS];
     int path_y[MAX_ROWS * MAX_COLUMNS];
