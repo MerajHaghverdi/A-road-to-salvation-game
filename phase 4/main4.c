@@ -306,6 +306,81 @@ int is_village_owned(int x, int y, int kingdom) {
     return 0;
 }
 
+// Check connectivity of roads and villages
+void check_connectivity(int kingdom) {
+    int visited[MAX_ROWS + 1][MAX_COLUMNS + 1] = {0};
+    int queue_x[MAX_ROWS * MAX_COLUMNS];
+    int queue_y[MAX_ROWS * MAX_COLUMNS];
+    int front = 0, rear = 0;
+
+    // Start BFS from kingdom capital
+    queue_x[rear] = kingdom_coordinates[kingdom][0];
+    queue_y[rear] = kingdom_coordinates[kingdom][1];
+    rear++;
+    visited[kingdom_coordinates[kingdom][0]][kingdom_coordinates[kingdom][1]] = 1;
+
+    while(front < rear) {
+        int curr_x = queue_x[front];
+        int curr_y = queue_y[front];
+        front++;
+
+        int dx[] = {-1, 1, 0, 0};
+        int dy[] = {0, 0, -1, 1};
+
+        for(int i = 0; i < 4; i++) {
+            int new_x = curr_x + dx[i];
+            int new_y = curr_y + dy[i];
+
+            if(new_x >= 1 && new_x <= rows && new_y >= 1 && new_y <= columns &&
+               !visited[new_x][new_y] &&
+               (map[new_x][new_y] == Kingdoms_road_name[kingdom] ||
+                (map[new_x][new_y] == 'V' && is_village_owned(new_x, new_y, kingdom)))) {
+                queue_x[rear] = new_x;
+                queue_y[rear] = new_y;
+                rear++;
+                visited[new_x][new_y] = 1;
+            }
+        }
+    }                                      
+
+
+    // Remove disconnected roads and villages
+    for(int i = 1; i <= rows; i++) {
+        for(int j = 1; j <= columns; j++) {
+            if(!visited[i][j]) {
+                if(map[i][j] == Kingdoms_road_name[kingdom]) {
+                    // Restore original hardness
+                    map[i][j] = hardnes_backup[i][j];
+                }
+                else if(map[i][j] == 'V' && is_village_owned(i, j, kingdom)) {
+                    // Find and remove village from kingdom's possessions
+                    for(int k = 0; k < counter_conquered_village[kingdom]; k++) {
+                        if(conquered_village[kingdom][k][0] == i &&
+                           conquered_village[kingdom][k][1] == j) {
+                            // Remove village's resources from kingdom
+                            for(int v = 0; v < numVillages; v++) {
+                                if(village_coordinates[v][0] == i &&
+                                   village_coordinates[v][1] == j) {
+                                    kingdom_gold_rate[kingdom] -= village_goldRates[v];
+                                    kingdom_food_rate[kingdom] -= village_foodRates[v];
+                                    break;
+                                }
+                            }
+                            // Remove village from conquered list
+                            for(int m = k; m < counter_conquered_village[kingdom] - 1; m++) {
+                                conquered_village[kingdom][m][0] = conquered_village[kingdom][m + 1][0];
+                                conquered_village[kingdom][m][1] = conquered_village[kingdom][m + 1][1];
+                            }
+                            counter_conquered_village[kingdom]--;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void remove_roads(int kingdom, int war_x, int war_y) {
     int path_x[MAX_ROWS * MAX_COLUMNS];
     int path_y[MAX_ROWS * MAX_COLUMNS];
