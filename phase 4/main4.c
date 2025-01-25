@@ -432,65 +432,6 @@ void kingdom_properties()
     }
 }
 
-void acting_kingdoms()
-{
-    int act;
-        print_map(map);
-    printf("what do you want to act ? : \n");
-    printf("enter 1 for buying 1 food with spending 1 gold : \n");
-    printf("enter 2 for hiring a worker for your kingdom with spending 3 food : \n");
-    printf("enter 3 for hiring a soldier for your kingdom with spending 2 gold : \n");
-    printf("enter 4 for creating a road in map with the consider cooardination : \n");
-    printf("enter 0 for act nothing and continue : \n");
-    scanf("%d",&act);
-        switch (act) {
-        case 1:
-            if (kingdom_gold[turn] > 0) {
-                kingdom_food[turn]++;
-                kingdom_gold[turn]--;
-                printf("Bought 1 food. Remaining gold: %d\n", kingdom_gold[turn]);
-            } else {
-                printf("Not enough gold!\n");
-            }
-            break;
-        case 2:
-            if (kingdom_food[turn] >= 3) {
-                kingdom_workers[turn]++;
-                kingdom_food[turn] -= 3;
-                printf("Hired 1 worker. Remaining food: %d\n", kingdom_food[turn]);
-            } else {
-                printf("Not enough food!\n");
-            }
-            break;
-        case 3:
-            if (kingdom_gold[turn] >= 2) {
-                kingdom_soldiers[turn]++;
-                kingdom_gold[turn] -= 2;
-                printf("Hired 1 soldier. Remaining gold: %d\n", kingdom_gold[turn]);
-            } else {
-                printf("Not enough gold!\n");
-            }
-            break;
-        case 4:
-    move_kingdom();
-    print_map();
-    break;
-
-        case 0:
-            printf("No action taken.\n");
-            break;
-        default:
-            printf("Invalid action! Try again.\n");
-        }
-    
-}
-void update_resources() {
-    for (int i = 0; i < numKingdom; i++) {
-        kingdom_gold[i] += kingdom_gold_rate[i];
-        kingdom_food[i] += kingdom_food_rate[i];
-    }
-}
-
 
 void conquer_villages() {
     for (int i = 0; i < numKingdom; i++) {
@@ -513,7 +454,70 @@ void conquer_villages() {
         }
     }
 
-    void start_game(){
+    void acting_kingdoms()
+{
+    int act;
+    print_map();
+    printf("🎮 what do you want to act %s ? : \n",House[turn]);
+    printf("🍖 1.buying 1 food with spending 1 gold : \n");
+    printf("👷 2.hiring a worker for your kingdom with spending 3 food : \n");
+    printf("💂 3.hiring a soldier for your kingdom with spending 2 gold : \n");
+    printf("🔨 4.creating a road in map with the consider cooardination : \n");
+    printf("❌ 0.act nothing and continue : \n");
+    scanf("%d",&act);
+    switch (act) {
+        case 1:
+            if (kingdom_gold[turn] > 0) {
+                kingdom_food[turn]++;
+                kingdom_gold[turn]--;
+                printf("🍖 Bought 1 food. Remaining gold: %d\n", kingdom_gold[turn]);
+            } else {
+                printf("⚠️ Not enough gold!\n");
+            }
+            break;
+        case 2:
+            if (kingdom_food[turn] >= 3) {
+                kingdom_workers[turn]++;
+                kingdom_food[turn] -= 3;
+                printf("👷 Hired 1 worker. Remaining food: %d\n", kingdom_food[turn]);
+            } else {
+                printf("⚠️ Not enough food!\n");
+            }
+            break;
+        case 3:
+            if (kingdom_gold[turn] >= 2) {
+                kingdom_soldiers[turn]++;
+                kingdom_gold[turn] -= 2;
+                printf("💂 Hired 1 soldier. Remaining gold: %d\n", kingdom_gold[turn]);
+            } else {
+                printf("⚠️ Not enough gold!\n");
+            }
+            break;
+        case 4:
+            move_kingdom();
+            check_war(turn);
+            for (int m=0; m<numKingdom; m++){
+                check_connectivity(m);
+            }
+            print_map();
+            break;
+
+        case 0:
+            printf("❌ No action taken.\n");
+            break;
+        default:
+            printf("⚠️ Invalid action! Try again.\n");
+    }
+
+}
+void update_resources() {
+    for (int i = 0; i < numKingdom  && switch_kingdom[i]==1; i++) {
+        kingdom_gold[i] += kingdom_gold_rate[i];
+        kingdom_food[i] += kingdom_food_rate[i];
+    }
+}
+
+void start_game(){
     int action;
     printf("🕹️ welcome to A road to salvation game 🕹️\n1.Start the game with the map I want 🗺️\n2.load game 🔃\n3.use ready map 📖\n4.Exit ❌\nenter your action: ");
     scanf("%d", &action);
