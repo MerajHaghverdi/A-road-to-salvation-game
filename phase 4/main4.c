@@ -29,6 +29,7 @@ int kingdom_food[MAX_KINGDOMS];
 int current_location[MAX_KINGDOMS][2];
 int switch_kingdom[MAX_KINGDOMS];
 char House[4][100];
+char player_icons[4][100] = {"🤴","🫅","👸","👩‍🚀"};
 
 typedef struct {
     char map[MAX_ROWS + 1][MAX_COLUMNS + 1];
@@ -357,16 +358,16 @@ void print_map() {
                     printf("❌ ");
                     break;
                 case 'A':
-                    printf("🐺 ");
+                    printf("🤴 ");
                     break;
                 case 'B':
-                    printf("🐲 ");
+                    printf("🫅 ");
                     break;
                 case 'C':
-                    printf("🦁 ");
+                    printf("👸 ");
                     break;
                 case 'D':
-                    printf("🦑 ");
+                    printf("👩‍🚀 ");
                     break;
                 case 'V':
                     printf("🏠 ");
@@ -404,16 +405,19 @@ void get_blocked() {
 }
 
 void get_kingdom() {
+    int x, y,p = 1;
     for (int i = 0; i < numKingdom; i++) {
-        int x, y;
         switch_kingdom[i]=1;
-        printf("Enter your house name(player %d):",i+1);
+        if(p){printf("Enter your house name(player %d):",i+1);
         scanf("%s",House[i]);
+        strcat(House[i],player_icons[i]);
+        }
         printf("Enter the coordinates of 🏰 %s (row column): ", House[i]);
         scanf("%d %d", &x, &y);
         if (x>rows || y>columns){
             printf("out of the map. try again\n");
             i--;
+            p = 0;
         }else if (map[x][y] == 'O') {
             map[x][y] = Kingdoms_name[i];
             printf("enter the gold production rate of %s : ",House[i]);
@@ -426,8 +430,10 @@ void get_kingdom() {
             scanf("%d",&kingdom_soldiers[i]);
             kingdom_coordinates[i][0] = x;
             kingdom_coordinates[i][1] = y;
+            p = 1;
         } else {
             printf("Cell already occupied. Try again.\n");
+            p = 0;
             i--;
         }
     }
@@ -1056,7 +1062,8 @@ void check_connectivity(int kingdom) {
                 visited[new_x][new_y] = 1;
             }
         }
-    }
+    }                                      
+
 
     // Remove disconnected roads and villages
     for(int i = 1; i <= rows; i++) {
@@ -1370,8 +1377,6 @@ void Big_battel (int kingdom1, int kingdom2, int war_x, int war_y) {
         if (kingdom_soldiers[kingdom1] < 0) kingdom_soldiers[kingdom1] = 0;
         remove_roads(kingdom1,war_x,war_y);
     } else {
-        kingdom_soldiers[kingdom1] = 0;
-        kingdom_soldiers[kingdom2] = 0;
         remove_roads(kingdom1,war_x,war_y);
     }
 }
@@ -1480,7 +1485,7 @@ void update_resources() {
 
 void distance_maker()
 {
-    printf("___________________________________________________________________________________________________________");
+    printf("\n___________________________________________________________________________________________________________\n");
 }
 void clrscr()
 {
@@ -1507,7 +1512,7 @@ void displayRanks(char name[][100],int wins[], int n){
     sortNames(name,wins,n);
     printf("👑 ranking of players 👑\n");
     printf("\n");
-        for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
         if (i==0) printf("🥇 ");
         if (i==1) printf("🥈 ");
@@ -1541,6 +1546,7 @@ int main() {
 
     start_game();
     distance_maker();
+    // clrscr();
     //GAME IS STARTING 🗡️
     printf("\n--- Game Turn ---\n");
     int round = 0;
@@ -1563,7 +1569,7 @@ int main() {
                 if(spell)apply_spell();
             }
             check = 0;
-            printf("\n");
+            distance_maker();
             printf("it's round %d\n",round);
             printf("\nit's turn %s\n", House[turn]);
             print_map();
@@ -1634,6 +1640,7 @@ int main() {
             fclose(out);
             break;        
         }
+        // clrscr();
     }
     for (int i=0; i<numKingdom;i++){
         if (switch_kingdom[i]==1){
