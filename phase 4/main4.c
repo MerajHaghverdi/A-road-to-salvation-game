@@ -318,6 +318,33 @@ void conquer_villages() {
     }
 }
 
+void Big_battel (int kingdom1, int kingdom2, int war_x, int war_y) {
+    int soldiers_kingdom1 = kingdom_soldiers[kingdom1];
+    int soldiers_kingdom2 = kingdom_soldiers[kingdom2];
+
+    if (soldiers_kingdom1 > soldiers_kingdom2) {
+
+        int loss_kingdom2 = soldiers_kingdom1 - soldiers_kingdom2;
+        if(loss_kingdom2 > kingdom_soldiers[kingdom2]){
+            loss_kingdom2 = kingdom_soldiers[kingdom2];
+        }
+        kingdom_soldiers[kingdom2] -= loss_kingdom2;
+        if (kingdom_soldiers[kingdom2] < 0) kingdom_soldiers[kingdom2] = 0;
+        printf("⚔️ kingdom %s has been destroyed by kingdom %s ! \n",House[kingdom2],House[kingdom1]);
+        delete_kingdom(kingdom2);
+
+    } else if (soldiers_kingdom1 < soldiers_kingdom2) {
+        int loss_kingdom1 = soldiers_kingdom2 - soldiers_kingdom1;
+        if(loss_kingdom1 > kingdom_soldiers[kingdom1]){
+            loss_kingdom1 = kingdom_soldiers[kingdom1];
+        }
+        kingdom_soldiers[kingdom1] -= loss_kingdom1;
+        if (kingdom_soldiers[kingdom1] < 0) kingdom_soldiers[kingdom1] = 0;
+        remove_roads(kingdom1,war_x,war_y);
+    } else {
+        remove_roads(kingdom1,war_x,war_y);
+    }
+}
 
 void check_war(int current_kingdom) {
     int current_x = current_location[current_kingdom][0];
