@@ -318,6 +318,45 @@ void conquer_villages() {
     }
 }
 
+
+void check_war(int current_kingdom) {
+    int current_x = current_location[current_kingdom][0];
+    int current_y = current_location[current_kingdom][1];
+
+
+    for (int i = 1; i <= rows; i++) {
+        for (int j = 1; j <= columns; j++) {
+
+
+            for (int other_kingdom = 0; other_kingdom < numKingdom; other_kingdom++) {
+                if (current_kingdom == other_kingdom) continue;
+
+                if (map[i][j] == Kingdoms_name[other_kingdom] &&
+                    abs(current_x - i) + abs(current_y - j) == 1) {
+                    printf("⚔️ All-Out War! %s and %s are fighting near a kingdom.\n", House[current_kingdom], House[other_kingdom]);
+                    Big_battel(current_kingdom, other_kingdom, current_x, current_y);
+                    return;
+                }
+
+                if(map[i][j] == 'V' && abs(current_x - i) + abs(current_y - j) == 1){
+                    if(!is_village_owned(i, j, current_kingdom)){
+                        check_village_war(current_kingdom);
+                        return;
+                    }
+                }
+
+                if (map[i][j] == Kingdoms_road_name[other_kingdom] &&
+                    abs(current_x - i) + abs(current_y - j) == 1) {
+                    printf("⚔️ Road War! %s and %s are fighting near a road.\n", House[current_kingdom], House[other_kingdom]);
+                    start_battle(current_kingdom, other_kingdom, current_x, current_y);
+                    return;
+                }
+            }
+        }
+
+    }
+}
+
 void move_kingdom() {
     int new_x, new_y;
     int move, scape;
