@@ -513,6 +513,65 @@ void conquer_villages() {
         }
     }
 
+    void start_game(){
+    int action;
+    printf("🕹️ welcome to A road to salvation game 🕹️\n1.Start the game with the map I want 🗺️\n2.load game 🔃\n3.use ready map 📖\n4.Exit ❌\nenter your action: ");
+    scanf("%d", &action);
+    if (action == 1) {
+        printf("Enter rows (max %d): ", MAX_ROWS);
+        scanf("%d", &rows);
+        if (rows > MAX_ROWS) rows = MAX_ROWS;
+
+        printf("Enter columns (max %d): ", MAX_COLUMNS);
+        scanf("%d", &columns);
+        if (columns > MAX_COLUMNS) columns = MAX_COLUMNS;
+
+        generate_map();
+        get_blocked();
+        int players;
+        printf("How do you want to play the game:\n1-with computer 🤖\n2-two players 🤴🫅\n3-three players 🤴🫅🦹\n4-four players 🤴🫅🦹👻\n");
+        scanf("%d",&players);
+        if (players==1 || players==2){
+            numKingdom=2;
+            if (players==1){
+                is_computer_game=1;
+            } else {
+                is_computer_game=0;
+            }
+        } else {
+            numKingdom=players;
+        }
+        int hardness;
+        printf("select hardness:\n1-easy 💧\n2-normal 💫\n3-Iran 💀\n");
+        scanf("%d",&hardness);
+        spell = 0;
+        printf("✨ do you want to palying in spell mode? (1=✅ / 0=❌)\n");
+        scanf("%d",&spell);
+        get_kingdom();
+        get_villages();
+        genrate_hardness(hardness);
+        print_map();
+        VillageInfo();
+        kingdominfo();
+
+        for (int i = 0; i < numKingdom; i++) {
+            current_location[i][0] = kingdom_coordinates[i][0]; // Set starting x
+            current_location[i][1] = kingdom_coordinates[i][1]; // Set starting y
+        }
+    }  else if (action == 2) {
+        if (!load_game()) {
+            start_game();
+        } 
+    } else if (action == 3){
+        if (!load_redaymap()) {
+            start_game();
+        } 
+    } else if (action == 4) {
+        exit(0);
+    }
+}
+
+
 void distance_maker()
 {
     printf("___________________________________________________________________________________________________________");
