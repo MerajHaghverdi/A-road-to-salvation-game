@@ -1290,11 +1290,45 @@ void start_game(){
 
 void distance_maker()
 {
-    printf("___________________________________________________________________________________________________________");
+    printf("\n___________________________________________________________________________________________________________\n");
 }
 void clrscr()
 {
     system("cls");
+}
+
+void sortNames(char name[][100],int wins[], int n) {  
+    for (int i = 0; i < n - 1; i++) {  
+        for (int j = 0; j < n - i - 1; j++) {  
+            if (wins[j] < wins[j + 1]) {  
+                int temp = wins[j];  
+                wins[j] = wins[j + 1];  
+                wins[j + 1] = temp; 
+                char tempName[100];
+                strcpy(tempName,name[j]);
+                strcpy(name[j],name[j+1]);
+                strcpy(name[j+1],tempName);
+            }  
+        }  
+    }  
+} 
+
+void displayRanks(char name[][100],int wins[], int n){
+    sortNames(name,wins,n);
+    printf("👑 ranking of players 👑\n");
+    printf("\n");
+    for (int i = 0; i < n; i++)
+    {
+        if (i==0) printf("🥇 ");
+        if (i==1) printf("🥈 ");
+        if (i==2) printf("🥉 ");
+        if (wins[i]>1){
+            printf("%d- %s ---> %d wins\n",i+1,name[i],wins[i]);
+        } else {
+            printf("%d- %s ---> %d win\n",i+1,name[i],wins[i]);
+        }
+    }
+    printf("\n");
 }
 
 
