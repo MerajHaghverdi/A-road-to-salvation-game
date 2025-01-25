@@ -45,30 +45,6 @@ void generate_map() {
     }
 }
 
-int generate_number() {
-    double r = (double)rand() / RAND_MAX;
-    if (r < 0.65)
-        return 1;
-    else if (r < 0.9)
-        return 2;
-    else if (r < 0.95)
-        return 3;
-    else
-        return 4;
-}
-
-void genrate_hardness(){
-    for (int i = 1; i <= rows; i++) {
-        for (int j = 1; j <= columns; j++) {
-            if (map[i][j]=='O'){
-                int num = generate_number();
-                map[i][j] = num + '0'; 
-
-            }
-        }
-    }
-}
-
 void print_map() {
     printf("   ");
     for (int j = 1; j <= columns; j++) {
@@ -80,18 +56,18 @@ void print_map() {
         printf("%2d ", i);
         for (int j = 1; j <= columns; j++) {
             switch (map[i][j]) {
-                case 'm':
+                case 'a':
                     printf("🔵 ");
                     break;
-                case 'n':
+                case 'b':
                     printf("🔴 ");
                     break;
-                case 'o':
+                case 'c':
+                    printf("🟣 ");
+                    break;
+                case 'd':
                     printf("⚪ ");
                     break;
-                case 'p':
-                    printf("⚫ ");
-                    break;                                                            
                 case '1':
                     printf("🟩 ");
                     break;
@@ -107,11 +83,23 @@ void print_map() {
                 case 'X':
                     printf("❌ ");
                     break;
+                case 'A':
+                    printf("🤴 ");
+                    break;
+                case 'B':
+                    printf("🫅 ");
+                    break;
                 case 'C':
-                    printf("🏰 ");
+                    printf("🦹 ");
+                    break;
+                case 'D':
+                    printf("👻 ");
                     break;
                 case 'V':
                     printf("🏠 ");
+                    break;
+                case 'L':
+                    printf("💀 ");
                     break;
                 default:
                     printf("❓ ");
@@ -121,6 +109,7 @@ void print_map() {
         printf("\n");
     }
 }
+
 int normal_number() {
     double r = (double)rand() / RAND_MAX;
     if (r < 0.65)
