@@ -364,28 +364,32 @@ void get_kingdom() {
     }
 }
 
-
 void get_villages() {
+    printf("🏠 Enter the number of villages: ");
+    scanf("%d", &numVillages);
+    for(int i = 0;i < numKingdom;i++) {
+        counter_conquered_village[i] = 0;
+    }
     for (int i = 0; i < numVillages; i++) {
         int x, y, goldRate, foodRate;
         printf("Enter the coordinates of village %d (row column): ", i + 1);
         scanf("%d %d", &x, &y);
 
         if (x>rows || y>columns){
-            printf("out of the map. try again\n");
+            printf("⚠️ out of the map. try again\n");
             i--;
         }else if (map[x][y] == 'O') {
             map[x][y] = 'V';
-            printf("Enter gold production rate for village %d: ",i+1);
+            printf("🪙  Enter gold production rate for village %d: ",i+1);
             scanf("%d", &goldRate);
-            printf("Enter food production rate for this village %d: ",i+1);
+            printf("🍖 Enter food production rate for this village %d: ",i+1);
             scanf("%d", &foodRate);
             village_coordinates[i][0]= x;
             village_coordinates[i][1]= y;
             village_goldRates[i] = goldRate;
             village_foodRates[i] = foodRate;
         } else {
-            printf("Cell already occupied. Try again.\n");
+            printf("⚠️ Cell already occupied. Try again.\n");
             i--;
         }
     }
