@@ -318,6 +318,94 @@ void conquer_villages() {
     }
 }
 
+void start_battle(int kingdom1, int kingdom2, int war_x, int war_y) {
+
+    int soldiers_kingdom1 = kingdom_soldiers[kingdom1];
+    int soldiers_kingdom2 = kingdom_soldiers[kingdom2];
+
+    if (soldiers_kingdom1 > soldiers_kingdom2) {
+
+        int loss_kingdom2 = soldiers_kingdom1 - soldiers_kingdom2;
+
+        if(loss_kingdom2 > kingdom_soldiers[kingdom2]){
+            loss_kingdom2 = kingdom_soldiers[kingdom2];
+        }
+        kingdom_soldiers[kingdom2] -= loss_kingdom2;
+        if (kingdom_soldiers[kingdom2] < 0) kingdom_soldiers[kingdom2] = 0;
+
+        printf("%s wins the battle!\n", House[kingdom1]);
+        printf("Kingdom %s loses %d soldiers\n%s loses 0 soldiers.\n",
+               House[kingdom2], loss_kingdom2, House[kingdom1]);
+        remove_roads(kingdom2, war_x,war_y);
+        // map[new_road_x][new_road_y]=Kingdoms_road_name[kingdom1];
+
+    } else if (soldiers_kingdom1 < soldiers_kingdom2) {
+        int loss_kingdom1 = soldiers_kingdom2 - soldiers_kingdom1;
+
+        if(loss_kingdom1 > kingdom_soldiers[kingdom1]){
+            loss_kingdom1 = kingdom_soldiers[kingdom1];
+        }
+        kingdom_soldiers[kingdom1] -= loss_kingdom1;
+        if (kingdom_soldiers[kingdom1] < 0) kingdom_soldiers[kingdom1] = 0;
+
+        printf("%s wins the battle!\n", House[kingdom2]);
+        printf("%s loses %d soldiers\n%s loses 0 soldiers.\n",
+               House[kingdom1], loss_kingdom1, House[kingdom2]);
+        remove_roads(kingdom1,war_x,war_y);
+    } else {
+        // Draw
+        printf("⚔️ The battle ends in a draw! No losses for either kingdom.\n");
+        kingdom_soldiers[kingdom1] = kingdom_soldiers[kingdom1]/2;
+        kingdom_soldiers[kingdom2] = kingdom_soldiers[kingdom2]/2;
+        remove_roads(kingdom1,war_x,war_y);
+        remove_roads(kingdom2,war_x,war_y);
+    }
+}
+
+void village_battle(int kingdom1, int kingdom2, int war_x, int war_y, int village_x
+        ,int village_y) {
+
+    int soldiers_kingdom1 = kingdom_soldiers[kingdom1];
+    int soldiers_kingdom2 = kingdom_soldiers[kingdom2];
+
+
+    if (soldiers_kingdom1 > soldiers_kingdom2) {
+
+        int loss_kingdom2 = soldiers_kingdom1 - soldiers_kingdom2;
+
+        if(loss_kingdom2 > kingdom_soldiers[kingdom2]){
+            loss_kingdom2 = kingdom_soldiers[kingdom2];
+        }
+        kingdom_soldiers[kingdom2] -= loss_kingdom2;
+        if (kingdom_soldiers[kingdom2] < 0) kingdom_soldiers[kingdom2] = 0;
+        printf("Kingdom %s loses %d soldiers\n%s loses 0 soldiers.\n",
+               House[kingdom2], loss_kingdom2, House[kingdom1]);
+
+        remove_roads(kingdom2, village_x,village_y);
+
+    } else if (soldiers_kingdom1 < soldiers_kingdom2) {
+        int loss_kingdom1 = soldiers_kingdom2 - soldiers_kingdom1;
+
+        if(loss_kingdom1 > kingdom_soldiers[kingdom1]){
+            loss_kingdom1 = kingdom_soldiers[kingdom1];
+        }
+        kingdom_soldiers[kingdom1] -= loss_kingdom1;
+        if (kingdom_soldiers[kingdom1] < 0) kingdom_soldiers[kingdom1] = 0;
+
+        printf("%s wins the battle!\n", House[kingdom2]);
+        printf("%s loses %d soldiers\n%s loses 0 soldiers.\n",
+               House[kingdom1], loss_kingdom1, House[kingdom2]);
+        remove_roads(kingdom1,war_x,war_y);
+    } else {
+        // Draw
+        kingdom_soldiers[kingdom2] = kingdom_soldiers[kingdom2]/2;
+        kingdom_soldiers[kingdom1] = kingdom_soldiers[kingdom1]/2;
+        printf("⚔️ The battle ends in a draw! No losses for either kingdom.\n");
+        remove_roads(kingdom1,war_x,war_y);
+        remove_roads(kingdom2,village_x,village_y);
+    }
+}
+
 void check_village_war(int current_kingdom) {
     int current_x = current_location[current_kingdom][0];
     int current_y = current_location[current_kingdom][1];
