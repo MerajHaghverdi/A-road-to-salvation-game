@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
+#include <ctype.h>
 
 #define MAX_ROWS 17
 #define MAX_COLUMNS 17
@@ -8,7 +10,10 @@
 #define MAX_VILLAGES 20
 
 char map[MAX_ROWS + 1][MAX_COLUMNS + 1];
-int rows, columns, numVillages, numKingdom, turn;
+char hardnes_backup[MAX_COLUMNS+1][MAX_COLUMNS+1];
+int rows, columns, numVillages, numKingdom, turn,is_computer_game, new_road_x,new_road_y,spell,totalPlayers;
+char Kingdoms_name[4]={'A','B','C','D'};
+char Kingdoms_road_name[4]={'a','b','c','d'};
 int village_goldRates[MAX_VILLAGES];
 int village_foodRates[MAX_VILLAGES];
 int village_coordinates[MAX_VILLAGES][2];
@@ -22,6 +27,10 @@ int kingdom_coordinates[MAX_KINGDOMS][2];
 int kingdom_gold[MAX_KINGDOMS];
 int kingdom_food[MAX_KINGDOMS];
 int current_location[MAX_KINGDOMS][2];
+int switch_kingdom[MAX_KINGDOMS];
+char House_without_icon[4][100];
+char House[4][100];
+char player_icons[4][100] = {"🤴","🫅","🦹","👻"};
 
 void generate_map() {
     for (int i = 0; i <= rows; i++) {
