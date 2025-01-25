@@ -396,31 +396,39 @@ void get_villages() {
 }
 
 void VillageInfo() {
-    printf("\nVillages Information:\n");
+    printf("\n🏠 Villages Information:\n");
     for (int i = 0; i < numVillages; i++) {
         printf("Village %d -> Gold Rate: %d, Food Rate: %d ,coordinates;(%d,%d)\n", i + 1, village_goldRates[i], village_foodRates[i],village_coordinates[i][0],village_coordinates[i][1]);
     }
 }
+
 void kingdominfo(){
-     printf("\nkingdoms Information:\n");
+    printf("\n🏰 kingdoms Information:\n");
     for(int i = 0;i < numKingdom;i++)
     {
-        printf("kingdom %d -> gold rate : %d,food rate : %d ,current gold : %d ,current food : %d ,coordinates : (%d,%d)\n",i+1,kingdom_gold_rate[i],kingdom_food_rate[i],kingdom_gold[i],kingdom_food[i],kingdom_coordinates[i][0],kingdom_coordinates[i][1]);
-        printf("current location of kingdom %d is -> (%d,%d)\n",i+1,current_location[i][0],current_location[i][1]);                                     
+        if(switch_kingdom[i] == 1){
+            printf("%s -> gold rate : %d,food rate : %d ,🪙  = %d ,🍖 = %d ,coordinates : (%d,%d)\n",House[i],kingdom_gold_rate[i],kingdom_food_rate[i],kingdom_gold[i],kingdom_food[i],kingdom_coordinates[i][0],kingdom_coordinates[i][1]);
+            printf("current location of %s is -> (%d,%d)\n",House[i],current_location[i][0],current_location[i][1]);
+        }
+        else continue;
     }
 }
+
 void kingdom_properties()
 {
-    printf("\nkingdoms property:\n");
+    printf("\n🏰 kingdoms property:\n");
     for(int i = 0;i < numKingdom;i++)
     {
-        printf("the kingdome %d -> have %d workers and %d soldiers \n",i+1,kingdom_workers[i],kingdom_soldiers[i]);
-        printf("kingdom %d have %d villages in total.\n",i+1,counter_conquered_village[i]);
-        for(int j = 0;j < counter_conquered_village[i];j++)
-        {
-            printf("the kingdom %d have village with cooardination %d %d \n",i+1,conquered_village[i][j][0],conquered_village[i][j][1]);
+        if(switch_kingdom[i] == 1){
+            printf("%s ---> 👷= %d ,💂= %d \n",House[i],kingdom_workers[i],kingdom_soldiers[i]);
+            printf("%s have %d villages in total.\n",House[i],counter_conquered_village[i]);
+            for(int j = 0;j < counter_conquered_village[i];j++)
+            {
+                printf("%s  have village with cooardination (%d,%d) \n",House[i],conquered_village[i][j][0],conquered_village[i][j][1]);
+            }
+            printf("\n");
         }
-        printf("\n");
+        else continue;
     }
 }
 
