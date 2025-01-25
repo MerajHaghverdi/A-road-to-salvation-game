@@ -318,6 +318,93 @@ void conquer_villages() {
     }
 }
 
+void check_village_war(int current_kingdom) {
+    int current_x = current_location[current_kingdom][0];
+    int current_y = current_location[current_kingdom][1];
+
+    for (int i = 0; i < numVillages; i++) {
+        int village_x = village_coordinates[i][0];
+        int village_y = village_coordinates[i][1];
+
+        if (abs(current_x - village_x) + abs(current_y - village_y) == 1 && conquered_village[current_kingdom][i][0] != village_x && conquered_village[current_kingdom][i][1] != village_y) {
+
+            int village_owner = -1;
+
+
+            for (int other_kingdom = 0; other_kingdom < numKingdom; other_kingdom++) {
+                for (int k = 0; k < counter_conquered_village[other_kingdom]; k++) {
+                    if(other_kingdom == current_kingdom)continue;
+                    if (conquered_village[other_kingdom][k][0] == village_x &&
+                        conquered_village[other_kingdom][k][1] == village_y) {
+                        village_owner = other_kingdom;
+                        break;
+                    }
+                }
+                if (village_owner != -1) break;
+            }
+
+            if (village_owner == -1) {
+                conquer_villages();
+                return;
+            }
+
+
+            printf("⚔️ Village War! %s is fighting with %s for the village with the cooardinate (%d %d).😨\n", House[current_kingdom], House[village_owner],village_x,village_y);
+
+
+            if (kingdom_soldiers[current_kingdom] > kingdom_soldiers[village_owner]) {
+                printf("%s wins and conquers the village with the cooardination (%d %d)!🥳\n", House[current_kingdom],village_x,village_y);
+                counter_conquered_village[current_kingdom]++;
+                conquered_village[current_kingdom][counter_conquered_village[current_kingdom] - 1][0] = village_x;
+                conquered_village[current_kingdom][counter_conquered_village[current_kingdom] - 1][1] = village_y;
+                kingdom_gold_rate[current_kingdom] += village_goldRates[i];
+                kingdom_food_rate[current_kingdom] += village_foodRates[i];
+
+                for (int k = 0; k < counter_conquered_village[village_owner]; k++) {
+                    if (conquered_village[village_owner][k][0] == village_x &&
+                        conquered_village[village_owner][k][1] == village_y) {
+
+                        kingdom_gold_rate[village_owner] -= village_goldRates[i];
+                        kingdom_food_rate[village_owner] -= village_foodRates[i];
+
+                        for (int m = k; m < counter_conquered_village[village_owner] - 1; m++) {
+                            conquered_village[village_owner][m][0] = conquered_village[village_owner][m + 1][0];
+                            conquered_village[village_owner][m][1] = conquered_village[village_owner][m + 1][1];
+                        }
+                        counter_conquered_village[village_owner]--;
+                        break;
+                    }
+                }
+                village_battle(current_kingdom, village_owner,current_x,current_y,village_x,village_y);
+            } else if (kingdom_soldiers[current_kingdom] == kingdom_soldiers[village_owner]){
+                for (int k = 0; k < counter_conquered_village[village_owner]; k++) {
+                    if (conquered_village[village_owner][k][0] == village_x &&
+                        conquered_village[village_owner][k][1] == village_y) {
+
+                        kingdom_gold_rate[village_owner] -= village_goldRates[i];
+                        kingdom_food_rate[village_owner] -= village_foodRates[i];
+
+                        for (int m = k; m < counter_conquered_village[village_owner] - 1; m++) {
+                            conquered_village[village_owner][m][0] = conquered_village[village_owner][m + 1][0];
+                            conquered_village[village_owner][m][1] = conquered_village[village_owner][m + 1][1];
+                        }
+                        counter_conquered_village[village_owner]--;
+                        break;
+                    }
+                }
+                village_battle(current_kingdom, village_owner,current_x,current_y,village_x,village_y);
+                village_battle(village_owner, current_kingdom,village_x,village_y,current_x,current_y);
+            }else{
+                printf("%s lose the battle and the village with cooardination (%d,%d) is still belong to kingdom %d\n",House[current_kingdom],village_x,village_y,village_owner+1);
+                village_battle(village_owner,current_kingdom,current_x,current_y,village_x,village_y);
+            }
+
+
+            return;
+        }
+    }
+}
+
 void delete_kingdom(int kingdom) {
     for (int i = 1; i <= rows; i++) {
         for (int j = 1; j <= columns; j++) {
