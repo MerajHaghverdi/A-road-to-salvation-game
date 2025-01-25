@@ -32,6 +32,174 @@ char House_without_icon[4][100];
 char House[4][100];
 char player_icons[4][100] = {"🤴","🫅","🦹","👻"};
 
+typedef struct {
+    char map[MAX_ROWS + 1][MAX_COLUMNS + 1];
+    char hardnes_backup[MAX_COLUMNS+1][MAX_COLUMNS+1];
+    int rows, columns, numVillages, numKingdom, turn, is_computer_game,spell;
+    char Kingdoms_name[4];
+    char Kingdoms_road_name[4];
+    int village_goldRates[MAX_VILLAGES];
+    int village_foodRates[MAX_VILLAGES];
+    int village_coordinates[MAX_VILLAGES][2];
+    int conquered_village[MAX_KINGDOMS][MAX_VILLAGES][2];
+    int counter_conquered_village[MAX_KINGDOMS];
+    int kingdom_gold_rate[MAX_KINGDOMS];
+    int kingdom_food_rate[MAX_KINGDOMS];
+    int kingdom_workers[MAX_KINGDOMS];
+    int kingdom_soldiers[MAX_KINGDOMS];
+    int kingdom_coordinates[MAX_KINGDOMS][2];
+    int kingdom_gold[MAX_KINGDOMS];
+    int kingdom_food[MAX_KINGDOMS];
+    int current_location[MAX_KINGDOMS][2];
+    int switch_kingdom[MAX_KINGDOMS];
+    char House[4][100];
+    char House_without_icon[4][100];
+} GameState;
+
+void save_game() {
+    GameState state;
+
+    // Copy all game state variables
+    memcpy(state.map, map, sizeof(map));
+    memcpy(state.hardnes_backup, hardnes_backup, sizeof(hardnes_backup));
+    
+    state.rows = rows;
+    state.columns = columns;
+    state.numVillages = numVillages;
+    state.numKingdom = numKingdom;
+    state.turn = turn;
+    state.is_computer_game = is_computer_game;
+    state.spell = spell;
+    
+    memcpy(state.Kingdoms_name, Kingdoms_name, sizeof(Kingdoms_name));
+    memcpy(state.Kingdoms_road_name, Kingdoms_road_name, sizeof(Kingdoms_road_name));
+    
+    memcpy(state.village_goldRates, village_goldRates, sizeof(village_goldRates));
+    memcpy(state.village_foodRates, village_foodRates, sizeof(village_foodRates));
+    memcpy(state.village_coordinates, village_coordinates, sizeof(village_coordinates));
+    memcpy(state.conquered_village, conquered_village, sizeof(conquered_village));
+    memcpy(state.counter_conquered_village, counter_conquered_village, sizeof(counter_conquered_village));
+    
+    memcpy(state.kingdom_gold_rate, kingdom_gold_rate, sizeof(kingdom_gold_rate));
+    memcpy(state.kingdom_food_rate, kingdom_food_rate, sizeof(kingdom_food_rate));
+    memcpy(state.kingdom_workers, kingdom_workers, sizeof(kingdom_workers));
+    memcpy(state.kingdom_soldiers, kingdom_soldiers, sizeof(kingdom_soldiers));
+    memcpy(state.kingdom_coordinates, kingdom_coordinates, sizeof(kingdom_coordinates));
+    memcpy(state.kingdom_gold, kingdom_gold, sizeof(kingdom_gold));
+    memcpy(state.kingdom_food, kingdom_food, sizeof(kingdom_food));
+    memcpy(state.current_location, current_location, sizeof(current_location));
+    memcpy(state.switch_kingdom, switch_kingdom, sizeof(switch_kingdom));
+    memcpy(state.House, House, sizeof(House));
+    memcpy(state.House_without_icon, House_without_icon, sizeof(House_without_icon));
+
+    FILE *file = fopen("game_save.bin", "wb");
+    if (file == NULL) {
+        printf("Error saving game!\n");
+        return;
+    }
+
+    fwrite(&state, sizeof(GameState), 1, file);
+    fclose(file);
+    printf("Game saved successfully!\n");
+}
+
+int load_game() {
+    GameState state;
+    FILE *file = fopen("game_save.bin", "rb");
+    if (file == NULL) {
+        printf("No saved game found!\n");
+        return 0;
+    }
+
+    fread(&state, sizeof(GameState), 1, file);
+    fclose(file);
+
+    // Restore all game state variables
+    memcpy(map, state.map, sizeof(map));
+    memcpy(hardnes_backup, state.hardnes_backup, sizeof(hardnes_backup));
+    
+    rows = state.rows;
+    columns = state.columns;
+    numVillages = state.numVillages;
+    numKingdom = state.numKingdom;
+    turn = state.turn;
+    is_computer_game = state.is_computer_game;
+    spell = state.spell;
+
+    memcpy(Kingdoms_name, state.Kingdoms_name, sizeof(Kingdoms_name));
+    memcpy(Kingdoms_road_name, state.Kingdoms_road_name, sizeof(Kingdoms_road_name));
+    
+    memcpy(village_goldRates, state.village_goldRates, sizeof(village_goldRates));
+    memcpy(village_foodRates, state.village_foodRates, sizeof(village_foodRates));
+    memcpy(village_coordinates, state.village_coordinates, sizeof(village_coordinates));
+    memcpy(conquered_village, state.conquered_village, sizeof(conquered_village));
+    memcpy(counter_conquered_village, state.counter_conquered_village, sizeof(counter_conquered_village));
+    
+    memcpy(kingdom_gold_rate, state.kingdom_gold_rate, sizeof(kingdom_gold_rate));
+    memcpy(kingdom_food_rate, state.kingdom_food_rate, sizeof(kingdom_food_rate));
+    memcpy(kingdom_workers, state.kingdom_workers, sizeof(kingdom_workers));
+    memcpy(kingdom_soldiers, state.kingdom_soldiers, sizeof(kingdom_soldiers));
+    memcpy(kingdom_coordinates, state.kingdom_coordinates, sizeof(kingdom_coordinates));
+    memcpy(kingdom_gold, state.kingdom_gold, sizeof(kingdom_gold));
+    memcpy(kingdom_food, state.kingdom_food, sizeof(kingdom_food));
+    memcpy(current_location, state.current_location, sizeof(current_location));
+    memcpy(switch_kingdom, state.switch_kingdom, sizeof(switch_kingdom));
+    memcpy(House, state.House, sizeof(House));
+    memcpy(House_without_icon, state.House_without_icon, sizeof(House_without_icon));
+
+    printf("Game loaded successfully!\n");
+    return 1;
+}
+
+int load_redaymap() {
+    GameState state;
+    FILE *ready = fopen("ready_map.bin", "rb");
+    if (ready == NULL) {
+        printf("No saved game found!\n");
+        return 0;
+    }
+
+    fread(&state, sizeof(GameState), 1, ready);
+    fclose(ready);
+
+    // Restore all game state variables
+    memcpy(map, state.map, sizeof(map));
+    memcpy(hardnes_backup, state.hardnes_backup, sizeof(hardnes_backup));
+    
+    rows = state.rows;
+    columns = state.columns;
+    numVillages = state.numVillages;
+    numKingdom = state.numKingdom;
+    turn = state.turn;
+    is_computer_game = state.is_computer_game;
+    spell = state.spell;
+
+    memcpy(Kingdoms_name, state.Kingdoms_name, sizeof(Kingdoms_name));
+    memcpy(Kingdoms_road_name, state.Kingdoms_road_name, sizeof(Kingdoms_road_name));
+    
+    memcpy(village_goldRates, state.village_goldRates, sizeof(village_goldRates));
+    memcpy(village_foodRates, state.village_foodRates, sizeof(village_foodRates));
+    memcpy(village_coordinates, state.village_coordinates, sizeof(village_coordinates));
+    memcpy(conquered_village, state.conquered_village, sizeof(conquered_village));
+    memcpy(counter_conquered_village, state.counter_conquered_village, sizeof(counter_conquered_village));
+    
+    memcpy(kingdom_gold_rate, state.kingdom_gold_rate, sizeof(kingdom_gold_rate));
+    memcpy(kingdom_food_rate, state.kingdom_food_rate, sizeof(kingdom_food_rate));
+    memcpy(kingdom_workers, state.kingdom_workers, sizeof(kingdom_workers));
+    memcpy(kingdom_soldiers, state.kingdom_soldiers, sizeof(kingdom_soldiers));
+    memcpy(kingdom_coordinates, state.kingdom_coordinates, sizeof(kingdom_coordinates));
+    memcpy(kingdom_gold, state.kingdom_gold, sizeof(kingdom_gold));
+    memcpy(kingdom_food, state.kingdom_food, sizeof(kingdom_food));
+    memcpy(current_location, state.current_location, sizeof(current_location));
+    memcpy(switch_kingdom, state.switch_kingdom, sizeof(switch_kingdom));
+    memcpy(House, state.House, sizeof(House));
+    memcpy(House_without_icon, state.House_without_icon, sizeof(House_without_icon));
+
+    printf("Game loaded successfully!\n");
+    return 1;
+}
+
+
 void generate_map() {
     for (int i = 0; i <= rows; i++) {
         for (int j = 0; j <= columns; j++) {
