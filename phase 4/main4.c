@@ -521,80 +521,128 @@ void clrscr()
 {
     system("cls");
 }
+
+
 int main() {
     srand(time(NULL));
-    int action;
-    printf("welcome to A road to salvation game\n1.Enter to game\n2.Exit\nenter your action: ");
-    scanf("%d", &action);
 
-    if (action == 1) {
-        printf("Enter rows (max %d): ", MAX_ROWS);
-        scanf("%d", &rows);
-        if (rows > MAX_ROWS) rows = MAX_ROWS;
-
-        printf("Enter columns (max %d): ", MAX_COLUMNS);
-        scanf("%d", &columns);
-        if (columns > MAX_COLUMNS) columns = MAX_COLUMNS;
-
-        char map[MAX_ROWS + 1][MAX_COLUMNS + 1];
-
-        generate_map();
-        get_blocked();
-        int players;
-        printf("How do you want to play the game:\n1-with AI\n2-two players\n3-three players\n4-four players\n");
-        scanf("%d",&players);
-        if (players==1 || players==2){
-            numKingdom=2;
-        } else {
-            numKingdom=players;
-        }
-        
-        get_kingdom();
-        for(int i = 0; i < numKingdom; i++)
-        {
-            kingdom_gold[i] = 0;
-            kingdom_food[i] = 0;
-        }
-
-
-        printf("Enter the number of villages: ");
-        scanf("%d", &numVillages);
-
-        for(int i = 0;i < numKingdom;i++) {
-        counter_conquered_village[i] = 0;
-        }
-        get_villages();
-        genrate_hardness();
-        print_map();
-        VillageInfo();
-        kingdominfo();
-
-        for (int i = 0; i < numKingdom; i++) {
-        current_location[i][0] = kingdom_coordinates[i][0]; // Set starting x
-        current_location[i][1] = kingdom_coordinates[i][1]; // Set starting y
-        }
-
-        distance_maker();
-        //GAME IS STARTING 🗡️
-        printf("\n--- Game Turn ---\n");
-        for(;turn < numKingdom;turn++) {
-
-        printf("\nits turn kingdom %d\n", turn + 1);
-        print_map(map);
-        update_resources();
-        VillageInfo();
-        kingdominfo();
-
-        kingdom_properties();
-
-        acting_kingdoms();
-        int continueGame=1;
-
-        if(turn == numKingdom - 1) turn = -1;
-        if (!continueGame) break;
-        distance_maker();
-        //clrscr();
+    FILE *tabel;
+    tabel = fopen("players.txt","r");
+    fscanf(tabel,"%d",&totalPlayers);
+    char name[totalPlayers+4][100];
+    int wins[totalPlayers+4];
+    for (int i = 0; i < totalPlayers; i++)
+    {
+        fscanf(tabel,"%s",name[i]);
+        fscanf(tabel,"%d",&wins[i]);
     }
- }
+
+    displayRanks(name,wins,totalPlayers);
+    fclose(tabel);
+
+    start_game();
+    distance_maker();
+    // clrscr();
+    //GAME IS STARTING 🗡️
+    printf("\n--- Game Turn ---\n");
+    int round = 0;
+    int check = 1;
+    for(;turn < numKingdom;turn++) {
+        for (int m=0; m<numKingdom; m++){
+            check_connectivity(m);
+        }
+        if (switch_kingdom[turn]==1){
+            //update resources will work at the first of each round!
+            if(check){
+                round++;
+                int save_choice;
+                printf("🔃 Do you want to save the game? (1=✅ / 0=❌): ");
+                scanf(" %d", &save_choice);
+                if (save_choice == 1) {
+                    save_game();
+                }
+                update_resources();
+                if(spell)apply_spell();
+            }
+            check = 0;
+            distance_maker();
+            printf("it's round %d\n",round);
+            printf("\nit's turn %s\n", House[turn]);
+            print_map();
+            VillageInfo();
+            kingdominfo();
+            kingdom_properties();
+            if (is_computer_game==1 && turn == 1){
+                computer_play();
+            } else {
+                acting_kingdoms();
+            }
+        }
+        if(turn == numKingdom - 1){
+            turn = -1;
+            check = 1;
+        }
+        int alive=0;
+        for (int l=0; l<numKingdom;l++){
+            if (switch_kingdom[l]==1){
+                alive++;
+            }
+        }
+        int endList = totalPlayers;
+        if (alive==1) {
+            int winnerIndex;
+            for (int k=0; k<numKingdom;k++){
+                if (switch_kingdom[k]==1){
+                    winnerIndex=k;
+                }
+            }
+            int checkedKingdom[numKingdom];
+            for (int i = 0; i < numKingdom; i++)
+            {
+                checkedKingdom[i]=0;               
+                for (int j = 0; j < totalPlayers; j++){
+                    if (strcmp(name[j],House_without_icon[i])==0 && i==winnerIndex){
+                        checkedKingdom[i]=1;
+                        wins[j]++;
+                    } else if (strcmp(name[j],House_without_icon[i])==0 && i!=winnerIndex){
+                        checkedKingdom[i]=1;
+                    }
+                }
+                
+            }
+
+            for (int i = 0; i < numKingdom; i++){
+                if (checkedKingdom[i]==0){
+                    if (winnerIndex==i){
+                        strcpy(name[endList],House_without_icon[i]);
+                        wins[endList]=1;
+                        checkedKingdom[i]=1;
+                        endList++;
+                    } else {
+                        strcpy(name[endList],House_without_icon[i]);
+                        wins[endList]=0;
+                        checkedKingdom[i]=1;
+                        endList++;                        
+                    }
+                }
+            }            
+            displayRanks(name,wins,endList);
+            FILE *out;
+            out = fopen("players.txt","w");
+            fprintf(out,"%d\n",endList);
+            for (int i=0; i<endList; i++){
+                fprintf(out,"%s %d\n",name[i],wins[i]);
+            }
+            fclose(out);
+            break;        
+        }
+        // clrscr();
+    }
+    for (int i=0; i<numKingdom;i++){
+        if (switch_kingdom[i]==1){
+            printf("%s won the game.🎉\n",House_without_icon[i]);
+            distance_maker();
+        }
+    }      
     return 0;
 }
