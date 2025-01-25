@@ -314,33 +314,56 @@ void get_blocked() {
 }
 
 void get_kingdom() {
-
+    int x, y,p = 1,m=1;
     for (int i = 0; i < numKingdom; i++) {
-        int x, y;
-        
-        printf("Enter the coordinates of kingdom %d (row column): ", i + 1);
+        m=1;
+        switch_kingdom[i]=1;
+        if(p){printf("Enter your house name(player %d): ",i+1);
+        scanf("%s",House[i]);
+        strcpy(House_without_icon[i],House[i]);
+        }
+        for (int j=0; j<i; j++){
+            if (strcmp(House[i],House[j])==0){
+                printf("⚠️ This name has already been used. Try another name.\n");
+                i--;
+                m=0;
+                break;
+            }
+        }
+        if (m){
+        printf("Enter the coordinates of %s (row column): ", House[i]);
         scanf("%d %d", &x, &y);
         if (x>rows || y>columns){
-            printf("out of the map. try again\n");
+            printf("⚠️ out of the map. try again\n");
             i--;
+            p = 0;
         }else if (map[x][y] == 'O') {
-            map[x][y] = 'C';
-             printf("enter the gold production rate of kingdom %d : ",i+1);
-             scanf("%d",&kingdom_gold_rate[i]);
-             printf("enter the food production rate of kingdom %d : ",i+1);
-             scanf("%d",&kingdom_food_rate[i]);
-             printf("enter the number of workers for kingdom %d : ",i+1);
-             scanf("%d",&kingdom_workers[i]);
-             printf("enter the number of soldier for kingdom %d : ",i+1);
-             scanf("%d",&kingdom_soldiers[i]);
-             kingdom_coordinates[i][0] = x;
-             kingdom_coordinates[i][1] = y;
+            map[x][y] = Kingdoms_name[i];
+            printf("🪙  enter the gold production rate of %s : ",House[i]);
+            scanf("%d",&kingdom_gold_rate[i]);
+            printf("🍖 enter the food production rate of %s : ",House[i]);
+            scanf("%d",&kingdom_food_rate[i]);
+            printf("👷 enter the number of workers for %s : ",House[i]);
+            scanf("%d",&kingdom_workers[i]);
+            printf("💂 enter the number of soldier for %s : ",House[i]);
+            scanf("%d",&kingdom_soldiers[i]);
+            kingdom_coordinates[i][0] = x;
+            kingdom_coordinates[i][1] = y;
+            p = 1;
         } else {
-            printf("Cell already occupied. Try again.\n");
+            printf("⚠️ Cell already occupied. Try again.\n");
+            p = 0;
             i--;
         }
     }
+    }
+    for(int i = 0; i < numKingdom; i++){
+        strcat(House[i],player_icons[i]);
+        kingdom_gold[i] = 0;
+        kingdom_food[i] = 0;
+    }
 }
+
 
 void get_villages() {
     for (int i = 0; i < numVillages; i++) {
