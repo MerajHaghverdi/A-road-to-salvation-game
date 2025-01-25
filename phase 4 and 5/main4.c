@@ -334,6 +334,16 @@ void print_map() {
     }
 }
 
+int easy_number() {
+    double r = (double)rand() / RAND_MAX;
+    if (r < 0.9)
+        return 1;
+    else if (r < 0.95)
+        return 2;
+    else
+        return 3;
+}
+
 int normal_number() {
     double r = (double)rand() / RAND_MAX;
     if (r < 0.65)
