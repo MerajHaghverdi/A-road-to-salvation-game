@@ -28,6 +28,7 @@ int kingdom_gold[MAX_KINGDOMS];
 int kingdom_food[MAX_KINGDOMS];
 int current_location[MAX_KINGDOMS][2];
 int switch_kingdom[MAX_KINGDOMS];
+char House_without_icon[4][100];
 char House[4][100];
 char player_icons[4][100] = {"🤴","🫅","🦹","👻"};
 
@@ -52,6 +53,7 @@ typedef struct {
     int current_location[MAX_KINGDOMS][2];
     int switch_kingdom[MAX_KINGDOMS];
     char House[4][100];
+    char House_without_icon[4][100];
 } GameState;
 
 void save_game() {
@@ -88,6 +90,7 @@ void save_game() {
     memcpy(state.current_location, current_location, sizeof(current_location));
     memcpy(state.switch_kingdom, switch_kingdom, sizeof(switch_kingdom));
     memcpy(state.House, House, sizeof(House));
+    memcpy(state.House_without_icon, House_without_icon, sizeof(House_without_icon));
 
     FILE *file = fopen("game_save.bin", "wb");
     if (file == NULL) {
@@ -142,6 +145,7 @@ int load_game() {
     memcpy(current_location, state.current_location, sizeof(current_location));
     memcpy(switch_kingdom, state.switch_kingdom, sizeof(switch_kingdom));
     memcpy(House, state.House, sizeof(House));
+    memcpy(House_without_icon, state.House_without_icon, sizeof(House_without_icon));
 
     printf("Game loaded successfully!\n");
     return 1;
@@ -189,6 +193,7 @@ int load_redaymap() {
     memcpy(current_location, state.current_location, sizeof(current_location));
     memcpy(switch_kingdom, state.switch_kingdom, sizeof(switch_kingdom));
     memcpy(House, state.House, sizeof(House));
+    memcpy(House_without_icon, state.House_without_icon, sizeof(House_without_icon));
 
     printf("Game loaded successfully!\n");
     return 1;
@@ -230,7 +235,7 @@ void select_random_spell(){
     double random_spell = (double)rand() / RAND_MAX;
     int select = select_random_kingdom();
     if(random_spell < 0.25){
-        printf("\ngold round🪙!%s gained 2 gold in this round!\n",House[select]);
+        printf("\ngold round🪙 !%s gained 2 gold in this round!\n",House[select]);
         kingdom_gold[select] += 2;
         return;
     }
@@ -337,10 +342,10 @@ void print_map() {
                     printf("🔴 ");
                     break;
                 case 'c':
-                    printf("⚪ ");
+                    printf("🟣 ");
                     break;
                 case 'd':
-                    printf("🟣 ");
+                    printf("⚪ ");
                     break;
                 case '1':
                     printf("🟩 ");
@@ -385,7 +390,7 @@ void print_map() {
 }
 void get_blocked() {
     int numBlocked;
-    printf("How many blocked cells(❌): ");
+    printf("How many blocked cells ❌ : ");
     scanf("%d", &numBlocked);
 
     for (int i = 0; i < numBlocked; i++) {
@@ -405,19 +410,23 @@ void get_blocked() {
 }
 
 void get_kingdom() {
-    int x, y,p = 1;
+    int x, y,p = 1,m=1;
     for (int i = 0; i < numKingdom; i++) {
+        m=1;
         switch_kingdom[i]=1;
         if(p){printf("Enter your house name(player %d): ",i+1);
         scanf("%s",House[i]);
+        strcpy(House_without_icon[i],House[i]);
         }
         for (int j=0; j<i; j++){
             if (strcmp(House[i],House[j])==0){
                 printf("⚠️ This name has already been used. Try another name.\n");
                 i--;
+                m=0;
                 break;
             }
         }
+        if (m){
         printf("Enter the coordinates of %s (row column): ", House[i]);
         scanf("%d %d", &x, &y);
         if (x>rows || y>columns){
@@ -426,7 +435,7 @@ void get_kingdom() {
             p = 0;
         }else if (map[x][y] == 'O') {
             map[x][y] = Kingdoms_name[i];
-            printf("🪙 enter the gold production rate of %s : ",House[i]);
+            printf("🪙  enter the gold production rate of %s : ",House[i]);
             scanf("%d",&kingdom_gold_rate[i]);
             printf("🍖 enter the food production rate of %s : ",House[i]);
             scanf("%d",&kingdom_food_rate[i]);
@@ -442,6 +451,7 @@ void get_kingdom() {
             p = 0;
             i--;
         }
+    }
     }
     for(int i = 0; i < numKingdom; i++){
         strcat(House[i],player_icons[i]);
@@ -466,7 +476,7 @@ void get_villages() {
             i--;
         }else if (map[x][y] == 'O') {
             map[x][y] = 'V';
-            printf("🪙 Enter gold production rate for village %d: ",i+1);
+            printf("🪙  Enter gold production rate for village %d: ",i+1);
             scanf("%d", &goldRate);
             printf("🍖 Enter food production rate for this village %d: ",i+1);
             scanf("%d", &foodRate);
@@ -493,7 +503,7 @@ void kingdominfo(){
     for(int i = 0;i < numKingdom;i++)
     {
         if(switch_kingdom[i] == 1){
-            printf("%s -> gold rate : %d,food rate : %d ,🪙 : %d ,🍖 : %d ,coordinates : (%d,%d)\n",House[i],kingdom_gold_rate[i],kingdom_food_rate[i],kingdom_gold[i],kingdom_food[i],kingdom_coordinates[i][0],kingdom_coordinates[i][1]);
+            printf("%s -> gold rate : %d,food rate : %d ,🪙  = %d ,🍖 = %d ,coordinates : (%d,%d)\n",House[i],kingdom_gold_rate[i],kingdom_food_rate[i],kingdom_gold[i],kingdom_food[i],kingdom_coordinates[i][0],kingdom_coordinates[i][1]);
             printf("current location of %s is -> (%d,%d)\n",House[i],current_location[i][0],current_location[i][1]);
         }
         else continue;
@@ -506,7 +516,7 @@ void kingdom_properties()
     for(int i = 0;i < numKingdom;i++)
     {
         if(switch_kingdom[i] == 1){
-            printf("%s ---> %d 👷workers and %d 💂soldiers \n",House[i],kingdom_workers[i],kingdom_soldiers[i]);
+            printf("%s ---> 👷= %d ,💂= %d \n",House[i],kingdom_workers[i],kingdom_soldiers[i]);
             printf("%s have %d villages in total.\n",House[i],counter_conquered_village[i]);
             for(int j = 0;j < counter_conquered_village[i];j++)
             {
@@ -560,7 +570,7 @@ void start_game(){
         printf("select hardness:\n1-easy 💧\n2-normal 💫\n3-Iran 💀\n");
         scanf("%d",&hardness);
         spell = 0;
-        printf("✨ do you want to palying in spell mode? (1-yes,0-no)\n");
+        printf("✨ do you want to palying in spell mode? (1=✅ / 0=❌)\n");
         scanf("%d",&spell);
         get_kingdom();
         get_villages();
@@ -818,7 +828,7 @@ void move_kingdom() {
     int move, scape;
     int up,down,right,left;
 
-    printf("🕹️ Choose the arrow keys to move (%s) or choose Esc to get out:\n", House[turn]);
+    printf("🕹️ Choose the arrow keys to move %s or choose Esc to get out:\n", House[turn]);
     scape = 1;
 
     while (scape) {
@@ -1188,6 +1198,8 @@ void start_battle(int kingdom1, int kingdom2, int war_x, int war_y) {
     } else {
         // Draw
         printf("⚔️ The battle ends in a draw! No losses for either kingdom.\n");
+        kingdom_soldiers[kingdom1] = kingdom_soldiers[kingdom1]/2;
+        kingdom_soldiers[kingdom2] = kingdom_soldiers[kingdom2]/2;
         remove_roads(kingdom1,war_x,war_y);
         remove_roads(kingdom2,war_x,war_y);
     }
@@ -1612,10 +1624,10 @@ int main() {
             {
                 checkedKingdom[i]=0;               
                 for (int j = 0; j < totalPlayers; j++){
-                    if (strcmp(name[j],House[i])==0 && i==winnerIndex){
+                    if (strcmp(name[j],House_without_icon[i])==0 && i==winnerIndex){
                         checkedKingdom[i]=1;
                         wins[j]++;
-                    } else if (strcmp(name[j],House[i])==0 && i!=winnerIndex){
+                    } else if (strcmp(name[j],House_without_icon[i])==0 && i!=winnerIndex){
                         checkedKingdom[i]=1;
                     }
                 }
@@ -1625,12 +1637,12 @@ int main() {
             for (int i = 0; i < numKingdom; i++){
                 if (checkedKingdom[i]==0){
                     if (winnerIndex==i){
-                        strcpy(name[endList],House[i]);
+                        strcpy(name[endList],House_without_icon[i]);
                         wins[endList]=1;
                         checkedKingdom[i]=1;
                         endList++;
                     } else {
-                        strcpy(name[endList],House[i]);
+                        strcpy(name[endList],House_without_icon[i]);
                         wins[endList]=0;
                         checkedKingdom[i]=1;
                         endList++;                        
@@ -1651,7 +1663,7 @@ int main() {
     }
     for (int i=0; i<numKingdom;i++){
         if (switch_kingdom[i]==1){
-            printf("%s won the game.🎉\n",House[i]);
+            printf("%s won the game.🎉\n",House_without_icon[i]);
             distance_maker();
         }
     }      

@@ -1,3 +1,7 @@
-2
+6
+kamal 5
 meraj 2
 ali 1
+korosh 1
+majid 0
+mohamad 0
