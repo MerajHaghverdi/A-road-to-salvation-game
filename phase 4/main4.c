@@ -121,6 +121,51 @@ void print_map() {
         printf("\n");
     }
 }
+int normal_number() {
+    double r = (double)rand() / RAND_MAX;
+    if (r < 0.65)
+        return 1;
+    else if (r < 0.9)
+        return 2;
+    else if (r < 0.95)
+        return 3;
+    else
+        return 4;
+}
+
+int iran_number() {
+    double r = (double)rand() / RAND_MAX;
+    if (r < 0.10)
+        return 1;
+    else if (r < 0.20)
+        return 2;
+    else if (r < 0.30)
+        return 3;
+    else
+        return 4;
+}
+
+void genrate_hardness(int hardness){
+    for (int i = 1; i <= rows; i++) {
+        for (int j = 1; j <= columns; j++) {
+            if (map[i][j]=='O'){
+                if (hardness==1){
+                    int num = easy_number();
+                    map[i][j] = num + '0';
+                    hardnes_backup[i][j] = num + '0';
+                } else if (hardness==2){
+                    int num = normal_number();
+                    map[i][j] = num + '0';
+                    hardnes_backup[i][j] = num + '0';
+                } else if (hardness==3){
+                    int num = iran_number();
+                    map[i][j] = num + '0';
+                    hardnes_backup[i][j] = num + '0';
+                }
+            }
+        }
+    }
+}
 
 void move_kingdom() {
     int new_x, new_y;
