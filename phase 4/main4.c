@@ -294,7 +294,7 @@ void move_kingdom() {
 
 void get_blocked() {
     int numBlocked;
-    printf("How many blocked cells: ");
+    printf("How many blocked cells ❌ : ");
     scanf("%d", &numBlocked);
 
     for (int i = 0; i < numBlocked; i++) {
@@ -307,7 +307,7 @@ void get_blocked() {
         }else if (map[x][y] == 'O') {
             map[x][y] = 'X';
         } else {
-            printf("Cell already occupied. Try again.\n");
+            printf("⚠️ Cell already occupied. Try again.\n");
             i--;
         }
     }
