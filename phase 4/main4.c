@@ -199,6 +199,62 @@ int load_redaymap() {
     return 1;
 }
 
+int select_random_kingdom() {
+    int chosen = -1;
+    double probability = 1.0 / numKingdom ;
+    int first = 0;
+    for (int i = 0; i < numKingdom; i++) {
+        double random_chance = (double)rand() / RAND_MAX;
+        if (random_chance <= probability && random_chance >= first) {
+            chosen = i;
+            break;
+        }
+        first += probability;
+        probability += probability;
+        if(i == numKingdom - 1) i = -1;
+    }
+
+    return chosen;
+}
+
+void select_random_spell(){
+    int chosen = -1;
+    double random_spell = (double)rand() / RAND_MAX;
+    int select = select_random_kingdom();
+    if(random_spell < 0.25){
+        printf("\ngold round🪙 !%s gained 2 gold in this round!\n",House[select]);
+        kingdom_gold[select] += 2;
+        return;
+    }
+    if(random_spell < 0.50){
+        printf("\nfood round🍖!%s gained 2 food in this round!\n",House[select]);
+        kingdom_food[select] += 2;
+        return;
+    }
+    if(random_spell < 0.70){
+        printf("\nfreazing❄️!%s lost 1 food!\n",House[select]);
+        kingdom_food[select] -= 1;
+        if(kingdom_food[select] < 0) kingdom_food[select] = 0;
+        return;
+    }
+    if(random_spell < 0.90){
+        printf("\nillness😷!one of %s soldiers is dead!\n",House[select]);
+        kingdom_soldiers[select] -= 1;
+        if(kingdom_soldiers[select] < 0) kingdom_soldiers[select] = 0;
+        return;
+    }
+    if(random_spell < 1){
+        printf("\na group of soldiers are joining you🔥!%s gained 2 soldier\n",House[select]);
+        kingdom_soldiers[select] += 2;
+        return;
+    }
+}
+void apply_spell(){
+    double random_apply = (double)rand() / RAND_MAX;
+    if(random_apply < 0.30){
+        select_random_spell();
+    }
+}
 
 void generate_map() {
     for (int i = 0; i <= rows; i++) {
